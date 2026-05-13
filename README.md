@@ -48,6 +48,14 @@ Install directly from the skill directory URL:
 $skill-installer install https://github.com/Majkey25/prompt-engineering-skill/tree/main/prompt-engineering
 ```
 
+You can also install with an `npx` installer flow in environments that expose the skill installer through `npx`:
+
+```bash
+npx skill-installer install https://github.com/Majkey25/prompt-engineering-skill/tree/main/prompt-engineering
+```
+
+It is also possible to just tell the agent to install it by itself (for example: "Install the prompt-engineering skill from this repo URL").
+
 ### Claude Code
 
 Copy the skill folder to one of these locations:
