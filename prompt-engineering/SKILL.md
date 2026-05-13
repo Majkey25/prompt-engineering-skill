@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: "create, improve, audit, or rewrite prompts, agent goals, /goal prompts, system prompts, internal self-prompts, task briefs, reusable instructions, and repo rules. use for any task when the user wants requests routed through prompt engineering first, asks to use prompt-engineering as a preflight, or wants better answers by first turning their request into an internal working prompt. use for make/write/improve/audit prompt, prompt codex/claude/chatgpt agent, ai-agent task, agents.md/claude.md/cursor rules/copilot/windsurf/aider, migration/refactor/bugfix/feature/ui/playwright/live verification, research, writing, analysis, extraction, image/video, business, study, and coding prompts. follow source-backed prompt engineering, karpathy-style agentic engineering, lean context, caveman token efficiency, eval loops, live verification, and strict self-review."
+description: "create, improve, audit, and rewrite prompts, agent instructions, task briefs, and reusable templates for coding, research, writing, and agent workflows. use when users ask for stronger prompts, clearer constraints, prompt preflight, or source-backed prompt quality improvements."
 ---
 
 # Prompt Engineering
