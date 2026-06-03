@@ -2,9 +2,9 @@
 
 Use to reduce cost, latency, and context bloat without weakening the task.
 
-## Required line
+## Header line
 
-Every generated prompt should include:
+After token-efficient style is selected, add:
 
 ```text
 @caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
@@ -72,7 +72,7 @@ Verify -> reproduce bug, fix root cause, run existing checks, test login live.
 Stop -> no fake done; report blocker if cannot run.
 ```
 
-## Caveman output for agents
+## Compact output for agents
 
 When prompting an agent, require:
 

@@ -10,13 +10,14 @@ Default stance: Karpathy-first agentic engineering. Fast AI is useful. Blind vib
 # Goal
 [Specific outcome. Include target stack, scope, and what must stay unchanged.]
 
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
-
 # Mode
 Production unless I explicitly say prototype.
 No blind vibe coding.
 Use AI speed + engineering discipline.
 Specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report.
+
+# Communication
+Be concise. Use exact technical names. No filler. Keep requirements, validation, evidence, and safety checks intact.
 
 # Context
 Known:
@@ -166,3 +167,11 @@ Report shortcuts + missing checks.
 ### Aider
 - Put repeated style/project rules in CONVENTIONS.md.
 - Keep coding prompt scoped and file-aware.
+
+## Optional token-efficient header
+
+Add only when the user requests caveman/token compression or the prompt must be extremely compact:
+
+```text
+@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
+```

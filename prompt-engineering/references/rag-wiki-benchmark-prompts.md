@@ -23,7 +23,8 @@ Treat the model as the last stage, not the whole system.
 # Goal
 Build / debug / evaluate [RAG or wiki task].
 
-@caveman / Talk caveman: concise English. Short lines. Use ->, =>, +, /, []. Save tokens. Keep validation and evidence.
+# Communication
+Be concise. Keep validation and evidence. Use compact checklists/tables when useful.
 
 # Context
 - corpus:

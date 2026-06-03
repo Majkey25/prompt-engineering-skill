@@ -17,7 +17,9 @@ Caveman style is not broken grammar. It is compressed engineering language:
 - no repeated constraints
 - complete verification
 
-## Required caveman line
+## Optional caveman line
+
+Use only when the user requests caveman/token compression or the target prompt benefits from extremely terse engineering language.
 
 Add near the top of generated prompts:
 
@@ -152,7 +154,7 @@ Before returning a prompt, check:
 - Are vague words translated?
 - Is output format explicit?
 - Is verification present?
-- Is `@caveman / Talk caveman` present?
+- If token-efficient style was requested, is `@caveman / Talk caveman` present?
 - Did compression remove anything important?
 
 If any answer is no -> fix the prompt before returning it.

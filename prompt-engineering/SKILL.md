@@ -1,11 +1,11 @@
 ---
 name: prompt-engineering
-description: "create, improve, audit, and rewrite prompts, agent instructions, task briefs, and reusable templates for coding, research, writing, and agent workflows. use when users ask for stronger prompts, clearer constraints, prompt preflight, or source-backed prompt quality improvements."
+description: "Create, improve, audit, and rewrite source-backed prompts, agent instructions, task briefs, eval cases, and reusable templates. Use when users ask for stronger prompts, prompt preflight, prompt documentation, prompt audits, agent rules, or measurable prompt-quality improvements."
 ---
 
 # Prompt Engineering
 
-Create prompts and internal task briefs that produce useful, verified results. Optimize behavior, not pretty wording.
+Create prompts and internal task briefs that produce useful, verified results. A good prompt is a lean work contract: clear goal, relevant context, enforceable constraints, explicit output format, and a way to check success.
 
 ## Autoprompt mode
 
@@ -30,26 +30,29 @@ Safety and system rules still win.
 
 ## Top doctrine
 
-Default doctrine for agentic and coding work:
+Default doctrine:
 
-1. Vibe coding is for prototypes and exploration.
-2. Production work needs specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report.
-3. Prompt = work contract, not a wish.
-4. Human owns architecture, taste, security, and final judgment.
-5. AI output is untrusted until checked.
-6. Brevity must never remove requirements, validation, evidence, safety, or done definition.
+1. Prompt = work contract, not a wish.
+2. Prompt = technical debt. Every rule must earn its place. Delete stale, vague, or model-folklore rules.
+3. Start from success criteria and representative cases before optimizing important prompts.
+4. Prefer clear structure, concrete constraints, examples where useful, and explicit output format.
+5. Keep context relevant and separated from instructions with Markdown, XML tags, or other delimiters.
+6. Model-specific guidance matters. Do not blindly apply old rules like "think step by step" to reasoning models.
+7. AI output is untrusted until checked against sources, schema, eval cases, or live behavior.
+8. Brevity must never remove requirements, validation, evidence, safety, or done definition.
+9. For coding work: specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report.
 
 For coding, repo, migration, refactor, bugfix, feature, UI, security, production-quality, or /goal tasks, load `references/karpathy-agentic-engineering.md` and `references/coding-agent-prompts.md`.
 
-## Caveman token style
+## Token-efficient style
 
-Every generated prompt must include this near the top:
+Use compact "caveman" style only when the user asks for it, token cost matters, or the target prompt benefits from terse engineering language. Do not force it into creative writing, customer-facing prose, legal/medical copy, exact JSON output, or any prompt where tone/format matters more than token savings.
+
+When relevant, add this near the top:
 
 ```text
 @caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 ```
-
-Also write the prompt itself in that style. Use compact sections, arrows, checklists, and schemas. Do not write broken caveman grammar when precision matters.
 
 Load `references/token-efficient-caveman-style.md` when cost, context, brevity, or token use matters.
 
@@ -86,17 +89,19 @@ Classify before writing or answering:
 
 Use when no narrower template fits:
 
-1. Role
-2. Task
-3. Context
-4. Success criteria
-5. Constraints
-6. Process
-7. Verification/evaluation
-8. Output format
-9. What not to do
+1. Objective
+2. Target user / audience
+3. Relevant context and source data
+4. Task and exact deliverable
+5. Constraints and non-goals
+6. Output format or schema
+7. Examples, only if they improve consistency
+8. Process / tool-use guidance
+9. Verification / eval criteria
+10. Failure and uncertainty policy
+11. Optional style and length controls
 
-Load `references/universal-prompt-framework.md`.
+Load `references/best-prompt-blueprint.md` and `references/universal-prompt-framework.md`.
 
 ## Coding-agent structure
 
@@ -156,6 +161,7 @@ Choose patterns deliberately:
 - ReAct/tool loop -> agent tasks with observations/actions.
 - RAG/source grounding -> factual answers from documents.
 - Rubric/evals -> important prompts.
+- Prompt optimization -> only after test cases or real failures exist.
 
 Load `references/prompt-pattern-library.md` and `references/domain-prompt-patterns.md`.
 
@@ -180,11 +186,14 @@ Load `references/evals-and-iteration.md`.
 - Normal prompt request -> output only finished prompt unless explanation requested.
 - Prompt improvement -> improved prompt + short fix list.
 - Autoprompt normal task -> answer the task; do not show internal prompt unless asked.
-- Skill maintenance -> changed files + validation + packaged zip link + update instructions.
+- Skill maintenance -> changed files + validation + source list + remaining risks.
 
-## Ultimate caveman and verification extensions
+## Strict review and verification extensions
 
-For high-value prompts, coding prompts, repo work, RAG/wiki prompts, benchmark prompts, cache prompts, or production prompts, also load `references/ultimate-caveman-extensions.md` and `references/rag-wiki-benchmark-prompts.md`.
+For high-value prompts, coding prompts, repo work, RAG/wiki prompts, benchmark prompts, cache prompts, or production prompts, load the relevant verification references:
+
+- Token-efficient or hostile-review prompts -> `references/ultimate-caveman-extensions.md`
+- RAG/wiki/vector/cache/benchmark prompts -> `references/rag-wiki-benchmark-prompts.md`
 
 Use these extra rules when relevant:
 
