@@ -1,8 +1,8 @@
 # Prompt Engineering Skill
 
-A reusable AI agent skill for creating, improving, auditing, and rewriting prompts for ChatGPT, Codex, Claude Code, and similar agent workflows.  
-It helps turn vague requests into clear, verifiable task briefs with constraints, validation steps, and output expectations.  
-The skill also supports source-backed prompt engineering and Karpathy-style agentic engineering patterns documented in the references folder.
+A reusable skill for creating, improving, auditing, and documenting prompts for ChatGPT, Codex, Claude Code, Cursor, Copilot agents, and similar AI workflows.
+
+It turns vague requests into clear prompt contracts: objective, context, task, constraints, output format, verification, and failure handling. The skill is source-backed and treats prompts as maintainable artifacts, not magic wording.
 
 ![License](https://img.shields.io/github/license/Majkey25/prompt-engineering-skill)
 ![Last Commit](https://img.shields.io/github/last-commit/Majkey25/prompt-engineering-skill)
@@ -14,23 +14,43 @@ The skill also supports source-backed prompt engineering and Karpathy-style agen
 ![Codex](https://img.shields.io/badge/Codex-compatible-412991)
 ![Claude%20Code](https://img.shields.io/badge/Claude%20Code-compatible-cc785c)
 
-## What this skill does
+## What it does
 
-- Turns vague ideas into strong prompts
+- Creates strong prompts from rough ideas
 - Rewrites weak prompts into clear task briefs
-- Creates prompts for coding agents
-- Creates prompts for research agents
 - Audits prompts for ambiguity, missing context, hidden assumptions, and weak success criteria
-- Helps structure reusable agent instructions
-- Supports prompt patterns inspired by documented guidelines in `prompt-engineering/references/`
+- Creates prompts for coding agents, research agents, RAG systems, extraction/classification, writing, and workflows
+- Documents what a best-practice prompt should look like
+- Builds reusable agent instruction files without bloated prompt folklore
+- Adds eval/check criteria so prompt quality can be measured
+- Supports token-efficient style only when useful or requested
 
-## Who this is for
+## Core idea
 
-- Developers using Codex, Claude Code, or other coding agents
-- People building reusable AI workflows
-- Prompt engineers
-- Students and builders who want stronger AI outputs
-- Teams standardizing agent instructions
+The best prompt is the shortest complete contract that lets a model produce the desired output and lets a human or tool verify success.
+
+A strong prompt usually includes:
+
+1. Objective
+2. Context and source data
+3. Task and deliverable
+4. Constraints and non-goals
+5. Output format or schema
+6. Examples, only when needed
+7. Process or tool-use guidance
+8. Verification or evaluation criteria
+9. Failure and uncertainty policy
+10. Style and length controls
+
+The full researched blueprint lives in [`prompt-engineering/references/best-prompt-blueprint.md`](./prompt-engineering/references/best-prompt-blueprint.md).
+
+## Why this skill is different
+
+Most prompt libraries collect clever phrases. This skill removes that noise.
+
+It follows current guidance from OpenAI, Anthropic, Google Gemini, Microsoft Azure OpenAI, prompt-engineering survey research, and the principle that prompts are technical debt. It avoids stale generic rules like always forcing visible chain-of-thought or stuffing every prompt with persona language.
+
+For reasoning models, it prefers simple direct prompts, internal validation, concise rationale when useful, and explicit success criteria. For important prompts, it pushes eval cases and iteration instead of guessing.
 
 ## Installation
 
@@ -48,13 +68,13 @@ Install directly from the skill directory URL:
 $skill-installer install https://github.com/Majkey25/prompt-engineering-skill/tree/main/prompt-engineering
 ```
 
-You can also install with an `npx` installer flow in environments that expose the skill installer through `npx`:
+If your environment exposes a skill installer through `npx`, this can also work:
 
 ```bash
 npx skill-installer install https://github.com/Majkey25/prompt-engineering-skill/tree/main/prompt-engineering
 ```
 
-It is also possible to just tell the agent to install it by itself (for example: "Install the prompt-engineering skill from this repo URL").
+You can also tell the agent: "Install the prompt-engineering skill from this repo URL."
 
 ### Claude Code
 
@@ -70,17 +90,56 @@ Copy the skill folder to one of these locations:
 - "Audit this prompt and tell me what context is missing."
 - "Rewrite this prompt so Claude Code can modify the repo without breaking existing behavior."
 - "Create a reusable prompt template for bug fixing."
-- "Create a prompt for an agent that follows Karpathy-style prompt guidelines."
+- "Create a research prompt with citations, contradiction handling, and current-source rules."
+- "Create a JSON extraction prompt with schema, null handling, and confidence rules."
+- "Document how the best prompt should look and why."
 
-## Example output
+## Example
 
-**Before**
+Weak prompt:
 
-`Make my repo better.`
+```text
+Make my repo better.
+```
 
-**After**
+Better prompt contract:
 
-A structured prompt that defines context, goal, constraints, files to inspect, required changes, validation steps, and expected final output format.
+```text
+# Objective
+Fix the highest-impact issue blocking the current app from running correctly.
+
+# Context
+Use the repository files, scripts, configs, and logs as evidence. Do not guess the stack.
+
+# Task
+Inspect the repo, identify the concrete blocker, fix the root cause, and verify the changed workflow live.
+
+# Constraints
+- Keep changes minimal.
+- Preserve existing behavior outside the fix.
+- Do not add dependencies unless required and justified.
+- Do not claim done without exact verification evidence.
+
+# Verification
+Run the app or relevant command, test the changed path, test one nearby old path, and report exact commands/results.
+
+# Output
+Return summary, files changed, verification run, blockers, and remaining risks.
+```
+
+## Reference map
+
+| Need | Reference |
+|---|---|
+| Best prompt structure | [`best-prompt-blueprint.md`](./prompt-engineering/references/best-prompt-blueprint.md) |
+| Universal prompt template | [`universal-prompt-framework.md`](./prompt-engineering/references/universal-prompt-framework.md) |
+| Coding-agent prompts | [`coding-agent-prompts.md`](./prompt-engineering/references/coding-agent-prompts.md) |
+| Research-backed rules | [`research-backed-principles.md`](./prompt-engineering/references/research-backed-principles.md) |
+| Prompt quality checklist | [`prompt-quality-checklist.md`](./prompt-engineering/references/prompt-quality-checklist.md) |
+| Evals and iteration | [`evals-and-iteration.md`](./prompt-engineering/references/evals-and-iteration.md) |
+| RAG/wiki/vector/cache prompts | [`rag-wiki-benchmark-prompts.md`](./prompt-engineering/references/rag-wiki-benchmark-prompts.md) |
+| Source-driven prompt audits | [`source-driven-prompt-audit.md`](./prompt-engineering/references/source-driven-prompt-audit.md) |
+| Token-efficient style | [`token-efficient-caveman-style.md`](./prompt-engineering/references/token-efficient-caveman-style.md) |
 
 ## Repository structure
 
@@ -96,22 +155,25 @@ A structured prompt that defines context, goal, constraints, files to inspect, r
     ├── agents/
     │   └── openai.yaml
     └── references/
+        ├── best-prompt-blueprint.md
         ├── universal-prompt-framework.md
         ├── coding-agent-prompts.md
-        ├── karpathy-agentic-engineering.md
-        └── ... (additional reference guides)
+        ├── research-backed-principles.md
+        └── ...
 ```
 
 ## Skill design
 
-`prompt-engineering/SKILL.md` is the skill entrypoint. It defines invocation behavior, operating doctrine, and output expectations.  
-The `prompt-engineering/references/` files contain focused guidelines loaded when relevant, such as coding-agent prompts, context management, evaluation loops, and prompt audit patterns.
+`prompt-engineering/SKILL.md` is the entrypoint. It controls when the skill triggers, how it routes tasks, and which reference file to load.
+
+The reference files are deliberately split by use case so the agent loads only the relevant guidance. This keeps the skill useful without turning every prompt into a giant instruction dump.
 
 ## Contributing
 
-Contributions are welcome. Open an issue for proposed changes, then submit a pull request with practical updates and examples.  
-See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contribution rules.
+Contributions should improve practical prompt behavior. Avoid generic "best practices" unless they become concrete rules, examples, templates, or checks.
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License. See [`LICENSE`](./LICENSE).
+MIT. See [`LICENSE`](./LICENSE).

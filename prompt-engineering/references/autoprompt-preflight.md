@@ -27,7 +27,7 @@ Examples:
 Use for simple tasks:
 
 ```text
-@caveman. Task -> [user goal].
+Task -> [user goal].
 Need -> direct answer.
 Constraints -> [user constraints].
 Check -> obvious errors + missing assumptions.
@@ -39,7 +39,7 @@ Output -> concise, useful, no filler.
 Use when task has multiple steps:
 
 ```text
-@caveman. Role -> senior operator.
+Role -> senior operator.
 Task -> [specific outcome]
 Context -> [known facts]
 Unknowns -> [what must be inferred or verified]
@@ -54,7 +54,7 @@ Risk -> state uncertainty, cite if researched
 Use for coding, legal/finance/health, long docs, current facts, artifacts, or multi-tool work:
 
 ```text
-@caveman. Role -> strict task owner.
+Role -> strict task owner.
 Goal -> [specific outcome]
 Context -> [source material + constraints]
 Success -> [done when]

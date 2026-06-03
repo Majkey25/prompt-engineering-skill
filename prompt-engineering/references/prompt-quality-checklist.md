@@ -9,11 +9,14 @@ Run before returning any generated prompt or using autoprompt output.
 - Context is relevant, not bloated.
 - Constraints are concrete.
 - Output format is explicit.
-- Prompt includes @caveman / Talk caveman.
-- Prompt itself is concise.
+- Prompt is concise enough for the task.
+- Token-efficient style is included only when requested or useful.
 - Verification/evaluation exists when outcome matters.
 - Unsafe/destructive actions are controlled.
 - Unsupported assumptions are not presented as facts.
+- Prompt rules are not stale folklore or generic behavior steering.
+- Role/persona exists only if it changes useful behavior.
+- Examples do not contradict the instructions.
 
 ## Coding-agent must pass
 
@@ -35,6 +38,7 @@ Run before returning any generated prompt or using autoprompt output.
 - Did not over-plan tiny task.
 - Did not ask avoidable clarification.
 - Did cite/search when current/high-stakes facts matter.
+- Did not reveal private chain-of-thought or hidden working prompts.
 
 ## Vague phrase conversion
 
@@ -57,6 +61,7 @@ Ask:
 3. Are we saving tokens in the right place?
 4. Are we hiding risk?
 5. Is this prompt a contract or a wish?
+6. Would this prompt be easy to delete, update, or test later?
 
 ## Complete merged skill checks
 
@@ -69,8 +74,8 @@ Before returning any final prompt from this expanded skill, verify:
 - UI prompts include Playwright or Playwright Interactive when available.
 - Migration prompts include inventory, mapping, behavior preservation, UI preservation, route/data-flow preservation, incremental checks, and final report.
 - Autoprompt mode can silently convert normal user requests into better internal task briefs.
-- `@caveman / Talk caveman` appears in generated prompts.
-- Caveman compression uses structure/symbols without deleting constraints.
+- Token-efficient caveman style appears only when requested or useful.
+- Compression uses structure/symbols without deleting constraints.
 - Karpathy-style agentic engineering is used for production coding work.
 - RAG/wiki/VDB/cache prompts include raw data, retrieval, metadata, stale cache, citation, and benchmark checks.
 - Important prompts include eval or benchmark cases.

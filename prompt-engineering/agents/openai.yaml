@@ -1,11 +1,6 @@
 interface:
-  display_name: Prompt Engineering
-  short_description: Turns any task into a sharper internal prompt, then builds verified
-    prompts and agent rules.
+  display_name: "Prompt Engineering"
+  short_description: "Build source-backed, testable prompt contracts"
+  default_prompt: "Use $prompt-engineering to turn this rough task into a verified prompt contract."
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true

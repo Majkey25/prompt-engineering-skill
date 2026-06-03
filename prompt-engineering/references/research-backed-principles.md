@@ -1,95 +1,95 @@
 # Research Backed Principles
 
-This file summarizes durable prompting rules from major official docs and practitioner sources. Use it as decision support, not as a citation database.
+Last researched: 2026-06-03.
 
-## OpenAI prompt guidance
+Use this file as decision support. For full reusable structure, load `best-prompt-blueprint.md`.
 
-- Put instructions clearly near the start for normal API prompts.
-- Separate instruction and context with delimiters.
+## Core rules
+
+- Prompt quality is measured by output reliability, not by impressive wording.
+- Define success criteria before heavy prompt engineering.
+- Prefer the shortest prompt that fully specifies goal, context, constraints, output format, and verification.
+- Separate instructions from user/source data with Markdown sections, XML tags, triple quotes, or schemas.
+- Use zero-shot for simple tasks. Add few-shot examples only when consistency, labels, edge cases, or style need them.
+- For factual work, require source grounding, citation/unsupported policy, and conflict handling.
+- For agentic work, include tool-use rules, observation/action loop, done definition, and verification evidence.
+- For important prompts, run representative cases, inspect failures, patch minimally, and retest.
+- Treat prompts as technical debt: keep them short, reviewed, scoped, versioned when critical, and easy to delete.
+
+## Model-specific reasoning
+
+- OpenAI reasoning models: keep prompts simple/direct; avoid forcing visible chain-of-thought by default.
+- Gemini and other providers may expose model-specific reasoning/planning controls; follow the current provider docs for the target model.
+- Prefer "reason internally, validate, then return concise rationale" when the final output needs quality but not private reasoning.
+- If visible reasoning is required for teaching/audit, ask for a concise explanation, not unrestricted chain-of-thought.
+
+## Prompt shape
+
+Strong prompts usually include:
+
+1. Objective
+2. Context/source data
+3. Task/deliverable
+4. Constraints/non-goals
+5. Output format/schema
+6. Examples if useful
+7. Process/tool-use guidance
+8. Verification/eval criteria
+9. Failure/uncertainty policy
+10. Style/length controls
+
+Role/persona is optional. Use it only when it changes decisions.
+
+## Source-specific takeaways
+
+### OpenAI
+
+- Put clear instructions near the start for ordinary API prompts.
+- Delimit instruction and context.
 - Be specific about outcome, length, format, style, and audience.
-- Show the desired output format with examples.
-- Start zero-shot, add few-shot examples when needed, consider fine-tuning only when prompting is not enough.
+- Show desired output format with examples when needed.
+- Start zero-shot, add few-shot when needed, then consider deeper optimization.
+- Use prompt optimization with datasets, annotations, graders, and manual review for production prompts.
 
-## OpenAI Codex guidance
+### Anthropic
 
-- Codex can inspect repo, edit files, run commands, and provide evidence from terminal/test output.
-- Large changes benefit from Ask/Plan first, then Code/implementation.
-- AGENTS.md is the durable repo instruction layer.
-- The agent loop is model + tools + observations + user feedback, not just one prompt.
+- Establish success criteria and empirical tests before prompt engineering.
+- Use clear/direct instructions, examples, XML structure, prompt chaining, and evals.
+- Tune verbosity, effort, tool use, and update behavior explicitly when the target model needs it.
 
-## OpenAI Skills guidance
+### Google Gemini
 
-- Skill description controls discovery.
-- Full SKILL.md loads only after trigger.
-- References/resources should be read only when needed.
-- Keep SKILL.md as control plane; move deep detail to references.
+- Use structured sections for role, instructions, constraints, context, task, and output format.
+- For current or grounded answers, make date/currentness and source-bound behavior explicit.
+- Tune reasoning/planning instructions by model and cost/latency requirements.
 
-## Anthropic prompt guidance
+### Microsoft/Azure OpenAI
 
-- Define success criteria before prompt engineering.
-- Build empirical tests/evals where possible.
-- Use clear/direct instructions.
-- Use examples for consistency.
-- Use XML tags/delimiters to separate content.
-- Chain complex prompts instead of one giant prompt.
-- For long context, put long docs high and query/instructions late; ask for quotes first.
+- Use clear framing, separators, examples, grounding, and explicit output constraints.
+- Validate generated answers even when prompt engineering is strong.
 
-## Claude Code guidance
+### The Prompt Report
 
-- Give the agent a way to verify work: tests, screenshots, expected outputs.
-- Explore first, plan, then code.
-- Use CLAUDE.md for project memory, but keep it useful and short.
-- Manage context aggressively because performance degrades as context fills.
-- Course-correct early.
+- Prompting has many named techniques. Do not cargo-cult them.
+- Select the smallest technique that matches the task and observed failure mode.
 
-## Google Vertex guidance
+### Prompts as technical debt
 
-- Prompt design is iterative.
-- Prompts can include instructions, context, examples, and partial input.
-- Rigorous testing/evaluation matters.
-- Try order changes when quality is inconsistent.
+- Avoid filling AGENTS.md, skill files, or system prompts with generic behavior steering.
+- Do not keep old model folklore unless it still passes evals.
+- Prefer concrete project facts, tool rules, and done criteria.
+- Delete prompt rules whenever the base model/tool already handles the behavior.
 
-## Microsoft/Azure style guidance
+## Sources
 
-- Use clear task framing.
-- Use separators, markdown, XML-like tags, schemas, and examples when structure matters.
-- Specify output format and constraints.
-
-## DAIR / Learn Prompting / pattern catalog guidance
-
-- Patterns are tools, not magic.
-- Use zero-shot for simple tasks.
-- Use few-shot for format/style consistency.
-- Use ReAct/tool loops for agentic tasks.
-- Use RAG/source grounding for factual tasks.
-- Use rubrics/evals for quality-sensitive tasks.
-
-## Cursor guidance
-
-- Plan first for larger work.
-- Use relevant files/context, not everything.
-- Rules are persistent context and should be focused, actionable, scoped, and split when large.
-- Use project rules when repeating prompts.
-
-## GitHub Copilot guidance
-
-- Custom instructions add reusable repo/team context.
-- Repository-wide, path-specific, and agent instructions have precedence rules.
-- Keep instructions short and self-contained.
-- Avoid conflicts between instruction layers.
-
-## HumanLayer 12-factor guidance
-
-- Own your prompts.
-- Own your context window.
-- Treat tools as structured outputs.
-- Compact errors into context.
-- Prefer small focused agents over giant agents.
-- Trigger agents from anywhere, but keep control flow explicit.
-
-## Karpathy/vibe coding guidance
-
-- Natural language is now a programming interface.
-- Vibe coding is useful for flow/prototypes.
-- Production needs human ownership, architecture taste, security review, diff review, tests/checks, and verification.
-- AI code may be bloaty, repetitive, or poorly abstracted. Prompt must force review.
+- OpenAI Help: https://help.openai.com/en/articles/6654000-best-practices-for-prompting
+- OpenAI prompt engineering: https://platform.openai.com/docs/guides/prompt-engineering
+- OpenAI reasoning best practices: https://platform.openai.com/docs/guides/reasoning-best-practices
+- OpenAI prompt generation: https://platform.openai.com/docs/guides/prompt-generation
+- OpenAI prompt optimizer: https://platform.openai.com/docs/guides/prompt-optimizer
+- Anthropic prompt engineering overview: https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview
+- Anthropic prompting best practices: https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-prompting-best-practices
+- Google Gemini prompt strategies: https://ai.google.dev/gemini-api/docs/prompting-strategies
+- Microsoft Azure OpenAI prompt engineering: https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering
+- The Prompt Report: https://arxiv.org/abs/2406.06608
+- Prompts are technical debt too: https://www.seangoedecke.com/prompts-are-technical-debt-too/
