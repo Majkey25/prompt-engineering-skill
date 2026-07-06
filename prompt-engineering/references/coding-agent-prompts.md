@@ -2,22 +2,25 @@
 
 Use for Codex, Claude Code, Cursor agent, Copilot agent, Windsurf, Aider, ChatGPT agent, MCP agents, browser agents, and repo tasks.
 
-Default stance: Karpathy-first agentic engineering. Fast AI is useful. Blind vibe coding is not acceptable for production work.
+Default stance: Karpathy-first agentic engineering + Ponytail minimalism + Caveman brevity. Fast AI is useful. Blind vibe coding is not acceptable for production work. Missing repo context must be discovered, not invented.
 
 ## Copy-paste template
+
+This is the full template. Use it for risky production work. For normal scoped coding tasks, compress it to a clean prompt with: Goal, context/unknowns, repo inspection, implementation rules, verification, and short final response. Do not dump every section when the task does not need it.
 
 ```text
 # Goal
 [Specific outcome. Include target stack, scope, and what must stay unchanged.]
 
+@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
+@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
+
 # Mode
 Production unless I explicitly say prototype.
+Use the highest available reasoning effort. Think through repo evidence, implementation choices, verification, and risks before editing. Do not expose private chain-of-thought.
 No blind vibe coding.
 Use AI speed + engineering discipline.
-Specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report.
-
-# Communication
-Be concise. Use exact technical names. No filler. Keep requirements, validation, evidence, and safety checks intact.
+Specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> short final report.
 
 # Context
 Known:
@@ -25,14 +28,16 @@ Known:
 - [user constraints]
 - [relevant files/routes/screenshots/errors]
 Unknown:
-- Mark unknowns. Find answers in repo before assuming.
+- Mark unknowns. Find answers in repo, docs, logs, tests, or current official sources before assuming.
+- Do not invent file paths, function names, architecture, APIs, commands, env vars, or test setup.
 
 # Non negotiable requirements
 - Detect real stack from repository files. No framework/tool/test-runner guesses.
 - Preserve existing behavior unless explicitly changed.
 - Preserve existing style, naming, architecture, and formatting conventions.
 - Change only files needed for this task.
-- No fake APIs, packages, commands, flags, routes, env vars, or framework features.
+- No fake APIs, packages, commands, flags, routes, env vars, tests, files, or framework features.
+- If this prompt lacks implementation details, discover them from repo evidence instead of filling gaps with guesses.
 - No broad rewrite without written reason + small plan.
 - No hardcoded secrets. No unsafe destructive commands.
 - Do not ask me to test what you can test.
@@ -43,24 +48,41 @@ Unknown:
 2. Inspect package files + lock files.
 3. Inspect config: build, lint, typecheck, test, framework, env examples, CI.
 4. Find entrypoints, routes, components, API clients, backend setup, data flow.
-5. Identify existing scripts and verification path.
-6. Summarize stack + affected files + risks before editing.
+5. Find the target function/feature, callers, tests, contracts, and nearby patterns before editing.
+6. Identify existing scripts and verification path.
+7. Summarize stack + affected files + risks before editing.
 
 # Plan before code
 Before editing:
 1. Restate task in <= 3 bullets.
-2. List affected files.
-3. List risks.
+2. List affected files discovered from repo evidence.
+3. List risks and unknowns.
 4. Give small implementation plan.
 Then implement.
 
+# Subagent use
+Use subagents only when they reduce real risk or time.
+Good uses:
+- Repo mapper: locate files, data flow, callers, tests, conventions.
+- Docs verifier: check current official docs for APIs, packages, CLIs, models, or framework behavior.
+- QA/test agent: reproduce bug, run checks, inspect logs, verify workflows.
+- UI/browser agent: screenshots, console/network, responsive checks, affected flow.
+- Security/review agent: auth, secrets, permissions, destructive actions, risky data paths.
+- Diff reviewer: independent review for bloat, regressions, fake APIs, style drift, missed edge cases.
+Rules:
+- Tiny scoped change -> no subagents unless needed.
+- One primary owner keeps the plan and final decision.
+- Subagents gather evidence or review. They do not invent architecture.
+- Primary owner must synthesize findings and reject unsupported claims.
+
 # Implementation rules
 - Prefer existing tools/patterns.
+- Apply Ponytail: smallest safe diff, stdlib/native/existing deps first.
 - Keep changes minimal.
 - Validate data at boundaries.
 - Keep error handling explicit.
 - Avoid formatting churn.
-- Do not add dependencies unless needed + justified.
+- Do not add dependencies unless needed + justified with repo evidence + current official docs.
 - Verify after each major slice when practical.
 
 # Live verification
@@ -105,13 +127,7 @@ Done only when:
 - Risks are explicit.
 
 # Final response
-Return:
-1. Summary
-2. Files changed
-3. Diff review findings
-4. Verification run: exact commands / URLs / screens / endpoints / flows
-5. Failures or blockers
-6. Remaining risks
+Return one short paragraph or at most 3 bullets. No rigid headings unless I ask. State what changed and what was verified. Mention blockers or risks only if real. Do not include filler, fake confidence, or a long ceremony.
 ```
 
 ## Large change prepend
@@ -167,11 +183,3 @@ Report shortcuts + missing checks.
 ### Aider
 - Put repeated style/project rules in CONVENTIONS.md.
 - Keep coding prompt scoped and file-aware.
-
-## Optional token-efficient header
-
-Add only when the user requests caveman/token compression or the prompt must be extremely compact:
-
-```text
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
-```

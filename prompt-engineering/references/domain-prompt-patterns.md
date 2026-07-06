@@ -15,7 +15,7 @@ Include:
 
 ```text
 Goal -> write [artifact] for [audience].
-Style -> concise, natural, no filler.
+Talk caveman -> concise, natural, no filler.
 Context -> [why it matters]
 Input facts -> [facts only]
 Voice -> [direct / warm / formal / human / terse]
@@ -38,7 +38,7 @@ Include:
 
 ```text
 Goal -> answer [question] with current evidence.
-Style -> concise, cite claims, no filler.
+Talk caveman -> concise, cite claims, no filler.
 Sources -> prefer primary docs / official data / recent sources.
 Method -> search, compare, triangulate, note conflicts.
 Rules -> cite key claims; mark inference; say unknown if unsupported.
@@ -58,6 +58,7 @@ Include:
 
 ```text
 Goal -> extract fields from input.
+Talk caveman -> output exact JSON only.
 Schema -> {...}
 Rules:
 - preserve original wording where possible
@@ -81,7 +82,7 @@ Include:
 
 ```text
 Goal -> choose best option for [situation].
-Style -> direct, no fence-sitting.
+Talk caveman -> direct, no fence-sitting.
 Options -> [A/B/C]
 Criteria -> [ranked]
 Constraints -> [budget/time/risk]
@@ -107,7 +108,7 @@ Include:
 
 ```text
 Goal -> generate image.
-Style -> compact, visual terms only.
+Talk caveman -> compact, visual terms only.
 Subject -> [main subject]
 Composition -> [framing / layout / focal point]
 Style -> [medium / era / rendering]
@@ -154,7 +155,7 @@ Include:
 
 ```text
 Goal -> teach [topic] to [level].
-Style -> simple, exact, no fluff.
+Talk caveman -> simple, exact, no fluff.
 Method -> explain -> example -> question -> feedback.
 Rules -> do not dump wall of text; check understanding.
 Output -> lesson + 3 practice tasks + answer key.
@@ -175,7 +176,7 @@ Include:
 
 ```text
 Goal -> design workflow for [process].
-Style -> concise, operational.
+Talk caveman -> concise, operational.
 Trigger -> [event]
 Inputs -> [data]
 Steps -> [ordered]

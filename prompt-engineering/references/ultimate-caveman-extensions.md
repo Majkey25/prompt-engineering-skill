@@ -1,4 +1,4 @@
-# Ultimate Caveman Extensions
+# Ultimate Ponytail + Caveman Extensions
 
 Use when the user wants maximum prompt quality, low token cost, strict review, coding-agent prompts, production-grade prompts, multi-agent review, benchmark prompts, or hostile review behavior.
 
@@ -17,13 +17,12 @@ Caveman style is not broken grammar. It is compressed engineering language:
 - no repeated constraints
 - complete verification
 
-## Optional caveman line
+## Required Ponytail + Caveman lines
 
-Use only when the user requests caveman/token compression or the target prompt benefits from extremely terse engineering language.
-
-Add near the top of generated prompts:
+Add near the top of generated technical/agent prompts:
 
 ```text
+@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 ```
 
@@ -154,7 +153,8 @@ Before returning a prompt, check:
 - Are vague words translated?
 - Is output format explicit?
 - Is verification present?
-- If token-efficient style was requested, is `@caveman / Talk caveman` present?
+- Is `@ponytail / Use Ponytail full` present when the prompt is technical/agentic?
+- Is `@caveman / Talk caveman` present?
 - Did compression remove anything important?
 
 If any answer is no -> fix the prompt before returning it.
@@ -178,12 +178,15 @@ For high-value prompts, use this header:
 # Goal
 [one precise outcome]
 
+@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 
 # Contract
 No fake done.
 No hidden assumptions.
 No broad rewrite unless required.
+Stdlib/native/existing deps first.
+Verify current APIs/libs/functions before using them when stale risk exists.
 Verify with real tools when possible.
 Report blockers exactly.
 ```

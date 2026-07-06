@@ -18,7 +18,8 @@ For real repos, user-facing apps, migrations, auth, billing, data, security, dep
 ```text
 Mode -> production.
 No blind vibe coding.
-Specs -> repo evidence -> plan -> small change -> inspect diff -> verify live -> fix -> report.
+Use highest available reasoning effort. Do not expose private chain-of-thought.
+Specs -> repo evidence -> plan -> small change -> inspect diff -> verify live -> fix -> short report.
 You own result. Do not say done because code was generated.
 ```
 
@@ -65,6 +66,17 @@ Look for bloat, repetition, accidental rewrites, style drift, weak abstractions,
 Fix safe issues before finishing.
 ```
 
+## Missing context
+
+For coding prompts with incomplete project information:
+
+```text
+Do not guess repo structure, files, functions, packages, APIs, commands, tests, env vars, or framework behavior.
+Inspect repo and current official docs when needed.
+Find the relevant code, callers, contracts, tests, and conventions before editing.
+Then implement the smallest safe change.
+```
+
 ## Ask/Plan before Code
 
 For large/risky changes:
@@ -87,6 +99,10 @@ Use for:
 - deployment/infrastructure
 - UI preservation/pixel matching
 - performance work
+
+## Subagent default
+
+For generated coding prompts, include subagent guidance only when it helps. Useful subagents: repo mapper, docs verifier, QA/test agent, UI/browser agent, security/review agent, and diff reviewer. Keep one primary implementation owner. Subagents gather evidence or review; they do not replace ownership or invent unsupported implementation details.
 
 ## Live verification default
 
@@ -125,11 +141,4 @@ Replace weak prompts:
 
 ## Final response target for coding agents
 
-Require:
-
-1. Summary
-2. Files changed
-3. Diff review findings
-4. Verification commands/flows/screens/endpoints
-5. Failures/blockers
-6. Remaining risks
+Require one short paragraph or at most 3 bullets, not a rigid report template. Include what changed, what was verified, and real blockers or risks only. Exact commands, screens, flows, endpoints, or URLs are useful when they prove verification. Skip empty sections and filler.

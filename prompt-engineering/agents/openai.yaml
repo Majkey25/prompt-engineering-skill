@@ -1,6 +1,14 @@
 interface:
-  display_name: "Prompt Engineering"
-  short_description: "Build source-backed, testable prompt contracts"
-  default_prompt: "Use $prompt-engineering to turn this rough task into a verified prompt contract."
+  display_name: Prompt Engineering
+  short_description: Build source-backed, testable prompt contracts
+  default_prompt: Use $prompt-engineering to turn this rough task into a verified
+    prompt contract.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
 policy:
   allow_implicit_invocation: true
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas

@@ -23,8 +23,8 @@ Treat the model as the last stage, not the whole system.
 # Goal
 Build / debug / evaluate [RAG or wiki task].
 
-# Communication
-Be concise. Keep validation and evidence. Use compact checklists/tables when useful.
+@ponytail / Use Ponytail full: smallest safe solution. Existing tools/data paths first. No new infra/deps unless needed + justified. Verify current APIs/libs before use.
+@caveman / Talk caveman: concise English. Short lines. Use ->, =>, +, /, []. Save tokens. Keep validation and evidence.
 
 # Context
 - corpus:
