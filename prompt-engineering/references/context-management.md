@@ -10,6 +10,8 @@ Context is budget, attention, and reliability. More context is not automatically
 - Add relevant files, not the whole repo.
 - Compact tool errors before feeding them back.
 - Start a new chat after a logical task or repeated failure.
+- Treat unknown project or task facts as unknown. Do not manufacture context to make a prompt feel complete.
+- Let a downstream agent inspect sources it can access more reliably than the upstream prompt writer.
 
 ## Ordering
 
@@ -104,3 +106,5 @@ Do not put timestamps, random IDs, or user-specific volatile data inside the sta
 - long unfiltered logs
 - old assumptions from previous tasks
 - context rot from endless chat
+- stale or unverified facts promoted into durable system or project instructions
+- duplicated tool schemas and project details inside global prompts

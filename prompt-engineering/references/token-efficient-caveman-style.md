@@ -2,7 +2,7 @@
 
 Use to reduce cost, latency, implementation bloat, and context bloat without weakening the task.
 
-Use Ponytail + Caveman together for generated coding, repo, technical-agent, automation, workflow, and prompt-audit prompts. Use only Caveman for non-coding prompts where implementation minimalism is irrelevant.
+Use Ponytail + Caveman together for generated coding, repo, automation, workflow, technical-research, and prompt-audit task-execution prompts. Use only Caveman for non-coding prompts where implementation minimalism is irrelevant. For system/developer prompts, keep only durable validated semantics; do not mechanically paste the block.
 
 Do not force it into:
 
@@ -12,12 +12,12 @@ Do not force it into:
 - exact JSON output
 - user-visible copy where tone matters more than tokens
 
-## Required technical-agent block
+## Required task-execution block
 
-For coding, repo, automation, workflow, technical research, and prompt-audit prompts, add:
+For coding, repo, automation, workflow, technical research, and prompt-audit task-execution prompts, add:
 
 ```text
-@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
+@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 ```
 

@@ -17,10 +17,29 @@ Run before returning any generated prompt or using autoprompt output.
 - Unsupported assumptions are not presented as facts.
 - Missing project/source facts are marked as unknown and assigned to repo/source inspection, not invented.
 - Token-efficient style is used only when useful, not blindly.
+- Prompt type and instruction layer are classified before writing.
+- Evidence level is classified as C0, C1, or C2.
+- Specificity does not exceed supplied or verified evidence.
+- The prompt is no larger or more prescriptive than the task and eval evidence justify.
+
+## System/developer-prompt must pass
+
+- Starts from a platform-default or no-custom-prompt baseline.
+- Contains durable cross-task behavior, not current task data or guessed project facts.
+- Separates advisory prompt rules from deterministic controls such as permissions, schemas, hooks, validators, and sandboxing.
+- States each instruction once and resolves hierarchy conflicts.
+- Does not impose a global UI aesthetic without product, brand, repository, reference, accessibility, or eval evidence.
+- Has baseline, minimal, and candidate variants for important use cases.
+- Has representative normal, ambiguous, edge, adversarial, initiative, and approval cases.
+- Has an ablation path for removing instruction groups.
+- Accepts a shorter or blank custom prompt when it performs better.
 
 ## Coding-agent must pass
 
 - Karpathy-style production stance included unless prototype.
+- C0 prompts are outcome-focused and discovery-first; they do not invent files, functions, frameworks, packages, commands, tests, env vars, architecture, routes, or UI implementation.
+- C1 prompts use exact supplied facts and label implementation theories as hypotheses.
+- C2 prompts use project specifics only when directly verified.
 - Stack/tooling must be discovered from repo evidence.
 - If code context is missing, prompt tells the agent what to inspect instead of guessing implementation details.
 - Subagents are considered for large/risky/parallelizable work and omitted for tiny scoped changes.
@@ -34,9 +53,19 @@ Run before returning any generated prompt or using autoprompt output.
 - Done definition is explicit.
 - Final response request is concise plain text unless a rigid structure is actually needed.
 
+## Image/video-prompt must pass
+
+- Prompt describes a coherent visual result rather than a disconnected keyword list.
+- Supplied references have explicit roles.
+- Image edits distinguish change from preservation.
+- Exact visible text is separated and quoted when required.
+- Negative constraints target likely failures instead of becoming a giant list.
+- Tool parameters are kept outside visual prose when structured arguments exist.
+- Detail is added only when it changes composition, fidelity, identity, timing, layout, or another required outcome.
+
 ## Autoprompt must pass
 
-- Did not show hidden working prompt unless asked.
+- Did not expose private reasoning or internal-only instructions; returned the finished user-facing prompt when requested.
 - Used more specific skill/tool when available.
 - Did not over-plan tiny task.
 - Did not ask avoidable clarification.
@@ -52,6 +81,9 @@ Delete or rewrite a rule if:
 - It repeats system/tool behavior.
 - It makes every task longer without improving outputs.
 - Nobody can explain how to test it.
+- Baseline or minimal behavior is equal or better without it.
+- It fills an unknown with a plausible but unverified implementation detail.
+- It encodes personal UI taste as global policy.
 - It solves one edge case but harms normal cases.
 
 ## Vague phrase conversion
@@ -76,6 +108,9 @@ Ask:
 4. Are source and uncertainty rules present when needed?
 5. Are we hiding risk?
 6. Is this prompt a contract or a wish?
+7. Would the target model perform better with less instruction?
+8. Which exact rule would I remove first in an ablation?
+9. Did I add any detail only because a template had a slot?
 
 ## Complete merged skill checks
 

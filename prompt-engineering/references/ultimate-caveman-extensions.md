@@ -19,10 +19,10 @@ Caveman style is not broken grammar. It is compressed engineering language:
 
 ## Required Ponytail + Caveman lines
 
-Add near the top of generated technical/agent prompts:
+Add near the top of generated technical/agent task-execution prompts. Do not mechanically paste it into system/developer prompts.
 
 ```text
-@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
+@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 ```
 
@@ -153,8 +153,8 @@ Before returning a prompt, check:
 - Are vague words translated?
 - Is output format explicit?
 - Is verification present?
-- Is `@ponytail / Use Ponytail full` present when the prompt is technical/agentic?
-- Is `@caveman / Talk caveman` present?
+- Is `@ponytail / Use Ponytail full` present when the prompt is technical/agentic task execution rather than a system/developer prompt?
+- Is `@caveman / Talk caveman` present when the output type supports it?
 - Did compression remove anything important?
 
 If any answer is no -> fix the prompt before returning it.
@@ -172,13 +172,13 @@ Replace weak words:
 
 ## Final compact prompt header
 
-For high-value prompts, use this header:
+For high-value task-execution prompts, use this header:
 
 ```text
 # Goal
 [one precise outcome]
 
-@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
+@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 
 # Contract

@@ -2,7 +2,7 @@
 
 Use this file when the user asks what a strong prompt should look like, asks for prompt documentation, or wants a reusable prompt template.
 
-Generated: 2026-06-03
+Updated: 2026-08-03
 
 This document explains how a strong prompt should look and why. It is a user-facing rationale, not private chain-of-thought.
 
@@ -33,6 +33,30 @@ A prompt should be treated like maintainable code:
 - Unknowns beat hallucinated specifics. If the model or target agent can inspect sources later, tell it what to inspect instead of pretending to know.
 
 Prompts become technical debt when they accumulate stale rules, generic persona text, contradictory constraints, or old fixes for problems the current model no longer has.
+
+## Minimum effective prompt
+
+Start from the platform default or no-custom-prompt behavior for important prompts. Then compare:
+
+1. Baseline
+2. Minimum prompt containing true requirements
+3. Proposed candidate
+
+Add an instruction only when it encodes a real requirement, authority boundary, material risk, stable output contract, or measured recurring failure. Remove it when baseline or a shorter variant performs equally well.
+
+Do not confuse prompt completeness with prompt length. A prompt that suppresses useful model judgment is not safer merely because it is detailed.
+
+## Evidence-calibrated specificity
+
+Classify available context:
+
+- C0: no relevant source or project inspected
+- C1: partial user-provided evidence
+- C2: target source or project directly inspected
+
+At C0, state the outcome and tell the target agent what to inspect. Do not invent file paths, functions, frameworks, packages, commands, schemas, architecture, or UI details. At C1, preserve supplied facts and label hypotheses. At C2, use verified specifics when they reduce risk or search.
+
+For system prompts, load `system-prompt-architecture.md`. For coding prompts, load `coding-context-calibration.md` and `coding-agent-prompts.md`. For image/video prompts, load `image-video-prompts.md`.
 
 ## Ideal prompt anatomy
 
@@ -428,6 +452,11 @@ Return verdict, evidence, conflicts, uncertainty, and next step.
 
 ## Sources behind this blueprint
 
+Current source map and review notes: `research-source-map.md`.
+
+- OpenAI latest-model prompting guidance: https://developers.openai.com/api/docs/guides/latest-model
+- OpenAI image prompting guidance: https://openai.com/academy/image-generation/
+- Anthropic Claude Code best practices: https://code.claude.com/docs/en/best-practices
 - OpenAI Help: https://help.openai.com/en/articles/6654000-best-practices-for-prompting
 - OpenAI prompt engineering: https://platform.openai.com/docs/guides/prompt-engineering
 - OpenAI reasoning best practices: https://platform.openai.com/docs/guides/reasoning-best-practices

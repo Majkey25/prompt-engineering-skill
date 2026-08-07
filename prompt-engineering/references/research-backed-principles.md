@@ -2,6 +2,8 @@
 
 This file summarizes durable prompting rules from major official docs and practitioner sources. Use it as decision support, not as a citation database.
 
+For selected current source URLs, review dates, and model-specific caveats, load `research-source-map.md`. Recheck time-sensitive model guidance before turning it into a durable rule.
+
 ## OpenAI prompt guidance
 
 - Put instructions clearly near the start for normal API prompts.
@@ -9,11 +11,22 @@ This file summarizes durable prompting rules from major official docs and practi
 - Be specific about outcome, length, format, style, and audience.
 - Show the desired output format with examples.
 - Start zero-shot, add few-shot examples when needed, consider fine-tuning only when prompting is not enough.
+- For newer capable models, start lean and state each instruction once. Do not prescribe every intermediate step when the model can infer intent and use tools.
+- Compare important prompts against a platform-default or no-custom-prompt baseline. OpenAI reports workload-specific internal coding-agent gains from removing repeated instructions, unnecessary examples, and bloated tool descriptions; treat those numbers as directional, not universal.
+- Keep hard requirements, relevant context, approval boundaries, and success criteria even when shortening.
+
+## OpenAI image prompting guidance
+
+- A useful image prompt can often be 1 to 3 clear sentences.
+- State purpose, subject, action, setting, and the visual treatment that materially matters.
+- Add framing, lighting, exact text, or preservation rules only when they control the result.
+- For edits, state what changes and what must remain unchanged.
+- Iterate from observed mismatch instead of adding random adjectives or giant negative lists.
 
 ## OpenAI Codex guidance
 
 - Codex can inspect repo, edit files, run commands, and provide evidence from terminal/test output.
-- Large changes benefit from Ask/Plan first, then Code/implementation.
+- Large changes benefit from planning before implementation.
 - AGENTS.md is the durable repo instruction layer.
 - The agent loop is model + tools + observations + user feedback, not just one prompt.
 
@@ -33,6 +46,9 @@ This file summarizes durable prompting rules from major official docs and practi
 - Use XML tags/delimiters to separate content.
 - Chain complex prompts instead of one giant prompt.
 - For long context, put long docs high and query/instructions late; ask for quotes first.
+- A role can be one sentence. Decorative expertise language is not a substitute for clear scope.
+- Newer models can overtrigger on repeated CRITICAL, MUST, NEVER, and aggressive tool-use language. Use priority words only where they encode real hierarchy or risk.
+- Not every failure is best solved with more prompt text. Consider model choice, tool design, schemas, permissions, hooks, retrieval, or application logic.
 
 ## Claude Code guidance
 
@@ -40,6 +56,9 @@ This file summarizes durable prompting rules from major official docs and practi
 - Explore first, plan, then code.
 - Use CLAUDE.md for project memory, but keep it useful and short.
 - Manage context aggressively because performance degrades as context fills.
+- Let the coding agent fetch repository facts it can inspect more reliably than the upstream prompt writer.
+- Keep CLAUDE.md limited to durable facts and commands that the model cannot reliably infer from the project. Bloated persistent instructions can hide the current task.
+- Use hooks, permissions, schemas, and other deterministic controls for requirements that must not be advisory.
 - Course-correct early.
 
 ## Google Vertex guidance
@@ -93,3 +112,7 @@ This file summarizes durable prompting rules from major official docs and practi
 - Vibe coding is useful for flow/prototypes.
 - Production needs human ownership, architecture taste, security review, diff review, tests/checks, and verification.
 - AI code may be bloaty, repetitive, or poorly abstracted. Prompt must force review.
+
+## Interpretation rule
+
+The sources do not establish one universally best prompt structure. Use them to choose the minimum effective prompt for the target model, runtime, evidence level, and task. Preserve model capability unless a true requirement or measured failure justifies narrowing it.

@@ -20,6 +20,8 @@ It turns vague requests into clear prompt contracts: objective, context, task, c
 - Rewrites weak prompts into clear task briefs
 - Audits prompts for ambiguity, missing context, hidden assumptions, and weak success criteria
 - Creates prompts for coding agents, research agents, RAG systems, extraction/classification, writing, and workflows
+- Routes coding prompts by available evidence instead of inventing repository details
+- Covers system/developer prompts, general tasks, and image/video generation
 - Documents what a best-practice prompt should look like
 - Builds reusable agent instruction files without bloated prompt folklore
 - Adds eval/check criteria so prompt quality can be measured
@@ -134,12 +136,23 @@ Return summary, files changed, verification run, blockers, and remaining risks.
 | Best prompt structure | [`best-prompt-blueprint.md`](./prompt-engineering/references/best-prompt-blueprint.md) |
 | Universal prompt template | [`universal-prompt-framework.md`](./prompt-engineering/references/universal-prompt-framework.md) |
 | Coding-agent prompts | [`coding-agent-prompts.md`](./prompt-engineering/references/coding-agent-prompts.md) |
+| Coding context calibration | [`coding-context-calibration.md`](./prompt-engineering/references/coding-context-calibration.md) |
+| Prompt type routing | [`prompt-type-router.md`](./prompt-engineering/references/prompt-type-router.md) |
+| System/developer prompts | [`system-prompt-architecture.md`](./prompt-engineering/references/system-prompt-architecture.md) |
+| General tasks | [`general-task-prompts.md`](./prompt-engineering/references/general-task-prompts.md) |
+| Image and video prompts | [`image-video-prompts.md`](./prompt-engineering/references/image-video-prompts.md) |
 | Research-backed rules | [`research-backed-principles.md`](./prompt-engineering/references/research-backed-principles.md) |
 | Prompt quality checklist | [`prompt-quality-checklist.md`](./prompt-engineering/references/prompt-quality-checklist.md) |
 | Evals and iteration | [`evals-and-iteration.md`](./prompt-engineering/references/evals-and-iteration.md) |
 | RAG/wiki/vector/cache prompts | [`rag-wiki-benchmark-prompts.md`](./prompt-engineering/references/rag-wiki-benchmark-prompts.md) |
 | Source-driven prompt audits | [`source-driven-prompt-audit.md`](./prompt-engineering/references/source-driven-prompt-audit.md) |
 | Token-efficient style | [`token-efficient-caveman-style.md`](./prompt-engineering/references/token-efficient-caveman-style.md) |
+
+Generate a new JSON eval manifest without overwriting existing work:
+
+```bash
+python prompt-engineering/scripts/make_prompt_eval.py --type coding --out prompt-eval.json
+```
 
 ## Repository structure
 
@@ -150,10 +163,14 @@ Return summary, files changed, verification run, blockers, and remaining risks.
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── pyproject.toml
 └── prompt-engineering/
     ├── SKILL.md
     ├── agents/
     │   └── openai.yaml
+    ├── scripts/
+    │   ├── make_prompt_eval.py
+    │   └── test_prompt_tools.py
     └── references/
         ├── best-prompt-blueprint.md
         ├── universal-prompt-framework.md

@@ -1,11 +1,29 @@
 ---
 name: prompt-engineering
-description: "create, improve, audit, and rewrite source-backed prompts, agent instructions, task briefs, eval cases, reusable templates, and strict code review prompts. use when users ask for stronger prompts, prompt preflight, prompt documentation, prompt audits, coding-agent prompts, subagent plans, cr/code review prompts, review rubrics, measurable prompt-quality improvements, or prompts that should embed ponytail minimalism and caveman brevity."
+description: "create, improve, audit, and rewrite minimum-effective system and developer prompts, context-calibrated coding-agent prompts, general task prompts, image and video prompts, agent instructions, eval cases, reusable templates, and strict code review prompts. use when users ask for prompt engineering, system prompt design or audit, coding prompts, prompt preflight, prompt documentation, prompt audits, subagent plans, cr or code review prompts, image prompts, review rubrics, prompt evals or ablation, measurable prompt-quality improvements, or prompts that should embed ponytail minimalism and caveman brevity."
 ---
 
 # Prompt Engineering
 
 Create prompts and internal task briefs that produce useful, verified results. A good prompt is a lean work contract: clear goal, relevant context, enforceable constraints, explicit output format, and a way to check success.
+
+## Mandatory routing and evidence gate
+
+Before writing, load `references/prompt-type-router.md` and classify the target instruction layer. Do not use one mega-template for every prompt.
+
+Classify available evidence:
+
+- C0: rough request only; no relevant source, repository, product, or runtime inspected.
+- C1: partial user-provided evidence; some facts are known, but the target environment is not verified.
+- C2: relevant source, repository, product, or runtime directly inspected.
+
+Specificity must not exceed evidence:
+
+- C0 -> state outcome, supplied constraints, discovery path, and done criteria. Do not invent implementation facts.
+- C1 -> use exact supplied facts, label hypotheses, and require verification.
+- C2 -> use verified names, paths, commands, APIs, schemas, and patterns when they materially help.
+
+A prompt template is a menu. Omit sections and placeholders that do not earn their place. Never fill an empty slot with plausible detail.
 
 ## Autoprompt mode
 
@@ -24,7 +42,7 @@ Use levels:
 - Medium task -> use a visible short plan when useful, then execute.
 - Large/risky task -> create a scoped working prompt, plan first, then execute.
 - Coding/repo task -> use agentic engineering contract with Ponytail + Caveman embedded in the generated prompt.
-- Prompt request -> output the finished prompt; include Ponytail + Caveman when the target task is technical/agentic.
+- Prompt request -> output the finished prompt; include Ponytail + Caveman when the target task is technical/agentic, except system/developer prompts use the minimum-effective workflow.
 
 Safety and system rules still win.
 
@@ -40,25 +58,66 @@ Default doctrine:
 6. Model-specific guidance matters. Do not blindly apply old rules like "think step by step" to reasoning models.
 7. AI output is untrusted until checked against sources, schema, eval cases, or live behavior.
 8. Brevity must never remove requirements, validation, evidence, safety, or done definition.
-9. For coding work: embed Ponytail + Caveman contract -> specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report.
-10. For CR/code review work: issue intent -> diff/context evidence -> risk review -> verification review -> verdict. No "LGTM" without proof.
-11. Missing information is not permission to invent. Mark unknowns, tell the target agent where to inspect, and let repo/source evidence drive implementation.
-12. For coding prompts, consider subagents when the task is large, parallelizable, risky, or review-heavy. Keep one primary owner and avoid fake parallelism for tiny changes.
+9. For coding task prompts: embed Ponytail + Caveman contract -> specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> final report. Do not mechanically paste the full block into a durable system prompt.
+10. For coding work, optimize for the smallest semantically complete change, not the smallest textual diff or fewest lines.
+11. For CR/code review work: issue intent -> diff/context evidence -> risk review -> verification review -> verdict. No "LGTM" without proof.
+12. Missing information is not permission to invent. Mark unknowns, tell the target agent where to inspect, and let repo/source evidence drive implementation.
+13. For coding prompts, consider subagents when the task is large, parallelizable, risky, or review-heavy. Keep one primary owner and avoid fake parallelism for tiny changes.
+14. Start important prompt work from the platform default or no-custom-prompt baseline.
+15. Use the minimum effective prompt. Add a rule only for a real requirement, authorization boundary, material risk, or measured recurring failure.
+16. Prompt specificity must never exceed source specificity. Unsupported detail is not helpful context.
+17. System and developer prompts contain durable cross-task behavior. Current task facts belong in the user prompt or inspected project context.
+18. A blank, shorter, or less prescriptive prompt is a valid result when it performs better in representative evals.
 
 For coding, repo, migration, refactor, bugfix, feature, UI, security, production-quality, or /goal tasks, load `references/karpathy-agentic-engineering.md` and `references/coding-agent-prompts.md`.
 
 For CR, code review, PR review, "is this fix good", "review this diff", "approve or reject", or hostile reviewer requests, load `references/review-rubric.md`.
 
+## System and developer prompts
+
+For system prompts, developer prompts, assistant policies, global agent instructions, or agent constitutions, load `references/system-prompt-architecture.md` and `references/system-prompt-evals.md`.
+
+Required workflow:
+
+1. Map model, runtime, tools, instruction hierarchy, and deterministic controls.
+2. Separate durable behavior from current-task facts.
+3. Run or design the same representative cases for baseline, minimal, and candidate variants.
+4. Write the minimum effective prompt.
+5. Remove or move rules that duplicate tools, schemas, permissions, hooks, validators, project files, or user-task context.
+6. Ablate instruction groups and keep only rules that improve required behavior or enforce a real boundary.
+
+Do not encode generic frontend taste into a global coding system prompt. No fixed cards, gradients, palette, font, animation library, spacing scale, or layout doctrine unless it comes from product requirements, brand evidence, repository patterns, supplied visual references, accessibility needs, or measured eval failures. Prefer outcome-level guidance and let the agent inspect the actual product.
+
+## Coding context calibration
+
+Before generating any coding-agent prompt, load `references/coding-context-calibration.md` and assign C0, C1, or C2. Then load `references/coding-agent-prompts.md` for the existing engineering guardrails.
+
+- C0 -> do not name files, functions, frameworks, packages, commands, tests, environment variables, architecture, routes, or UI details unless the user explicitly supplied them. Tell the target agent what to inspect and what outcome to verify.
+- C1 -> preserve exact supplied facts, mark unverified implementation theories as hypotheses, and direct the target agent to confirm them.
+- C2 -> use verified project details with traceable evidence.
+
+At every level, retain the root-cause, smallest-safe-change, existing-pattern, verification, testing, diff-review, and done-definition rules. The calibration gate changes unsupported task detail, not engineering rigor.
+
+## General and visual prompts
+
+- General non-coding task -> load `references/general-task-prompts.md`.
+- Image, image edit, diagram, poster, or video -> load `references/image-video-prompts.md`.
+- Use `references/universal-prompt-framework.md` only when no narrower pattern fits.
+
+For visual prompts, start with a direct scene or edit request. Add composition, lighting, text, preservation, negative constraints, and tool parameters only when they materially control the result. Do not inject Ponytail + Caveman into image or video prompt text.
+
 ## Ponytail + Caveman prompt contract
 
-For generated prompts that target coding agents, repo work, CR/code review, technical research, automation design, workflow implementation, prompt audits, or production-quality execution, include this contract near the top of the generated prompt, directly after `# Goal`:
+For generated task prompts that target coding agents, repo work, technical research, automation design, workflow implementation, prompt audits, or production-quality execution, include this contract near the top of the generated prompt, directly after `# Goal`:
 
 ```text
-@ponytail / Use Ponytail full: simplest safe solution that works. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
+@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
 ```
 
-Do not add this block to prompts where it would corrupt the required output or audience: exact JSON-only prompts, legal/medical/customer-facing copy, image/video prompt text, or creative writing. If the user explicitly asks to force it anyway, include it as an instruction section outside the final artifact/output schema.
+Do not add this block to prompts where it would corrupt the required output or audience: exact JSON-only prompts, legal/medical/customer-facing copy, image/video prompt text, or creative writing. Do not mechanically paste it into a system or developer prompt: use the minimum-effective system workflow and retain only durable, validated semantics in shorter wording. If the user explicitly asks to force it anyway, include it as an instruction section outside the final artifact/output schema.
+
+For CR/code review prompts, use `references/review-rubric.md`. Keep them review-only unless the user explicitly requests edits.
 
 Load `references/token-efficient-caveman-style.md` for the Caveman side. Use the Ponytail rules above as the compact source of truth unless the dedicated Ponytail skill is active.
 
@@ -74,7 +133,7 @@ For incomplete context:
 - Do not invent project structure, file names, functions, framework choices, APIs, packages, commands, tests, env vars, or implementation details.
 - If the target agent will have repo, terminal, browser, docs, or connector access, instruct that agent to inspect those sources first and then decide the implementation.
 - For coding requests like "modify this function" without repo context, write a lean prompt that states the desired behavior and tells the agent to find the function, callers, tests, contracts, and existing patterns before editing.
-- Prefer "inspect, verify, then implement the smallest safe change" over guessed step-by-step implementation details.
+- Prefer "inspect, verify, then implement the smallest semantically complete safe change" over guessed step-by-step implementation details.
 - For current libraries, APIs, models, CLIs, or security-sensitive behavior, require official/current docs after repo inspection.
 - Keep prompts plain and compact. Add only rules that materially reduce guessing, risk, or rework.
 
@@ -102,9 +161,9 @@ Rules:
 
 ## Token-efficient style
 
-For generated technical or agent prompts, use Ponytail + Caveman together by default. Ponytail controls scope and implementation weight. Caveman controls prompt brevity. Do not separate them unless the user asks or the prompt type would be damaged by terse style.
+For generated technical task or agent-execution prompts, use Ponytail + Caveman together by default. Ponytail controls scope and implementation weight. Caveman controls prompt brevity. Do not separate them unless the user asks, the prompt type would be damaged by terse style, or the target is a system/developer prompt being minimized and evaluated.
 
-When relevant, add the full Ponytail + Caveman contract near the top, not only the Caveman line.
+When relevant to a task-execution prompt, add the full Ponytail + Caveman contract near the top, not only the Caveman line.
 
 Load `references/token-efficient-caveman-style.md` when cost, context, brevity, or token use matters.
 
@@ -124,8 +183,9 @@ Load `references/source-driven-prompt-audit.md` and `references/research-backed-
 
 ## Choose prompt type first
 
-Classify before writing or answering:
+Load `references/prompt-type-router.md`, then classify before writing or answering:
 
+- System/developer/global behavior prompt -> minimum-effective system architecture + baseline/minimal/candidate eval.
 - Any normal user task in autoprompt mode -> internal task brief first.
 - Coding agent / repo task -> coding-agent contract.
 - `/goal` -> agentic coding prompt.
@@ -134,7 +194,7 @@ Classify before writing or answering:
 - Research -> source plan, recency, citations, contradiction handling.
 - Writing -> audience, tone, examples, constraints, revision criteria.
 - Extraction/classification -> schema, labels, edge cases, null handling, examples.
-- Image/video -> subject, composition, style, constraints, negative constraints, output specs.
+- Image/video -> direct visual intent, supplied references, material composition/preservation constraints, and tool parameters kept separate where supported.
 - Analysis/decision -> criteria, options, tradeoffs, assumptions, evidence, recommendation.
 - General prompt improvement -> universal framework + anti-vague rewrite.
 
@@ -158,7 +218,7 @@ Load `references/best-prompt-blueprint.md` and `references/universal-prompt-fram
 
 ## Coding-agent structure
 
-Use for Codex, Claude Code, Cursor, Copilot agent, Windsurf, Aider, ChatGPT agent, MCP/browser agents, and repo implementation. Treat this as a menu, not mandatory ceremony. For small coding prompts, keep only the sections that reduce guessing or risk. Expand only for broad, risky, production, migration, security, data, deployment, or UI verification work:
+Use for Codex, Claude Code, Cursor, Copilot agent, Windsurf, Aider, ChatGPT agent, MCP/browser agents, and repo implementation. First apply the C0/C1/C2 gate from `references/coding-context-calibration.md`. Treat this structure as a menu, not mandatory ceremony. For small coding prompts, keep only the sections that reduce guessing or risk. Expand only for broad, risky, production, migration, security, data, deployment, or UI verification work:
 
 1. Goal
 2. Ponytail + Caveman contract
@@ -177,16 +237,22 @@ Use for Codex, Claude Code, Cursor, Copilot agent, Windsurf, Aider, ChatGPT agen
 
 Hard defaults:
 
+- Classify prompt-writer evidence as C0, C1, or C2 before adding project-specific detail.
+- Do not populate optional template fields with guesses. At C0, state desired behavior and discovery targets instead of implementation instructions.
 - Include the Ponytail + Caveman contract directly after `# Goal` in coding-agent prompts.
 - Ask the target agent to use the highest available reasoning effort for planning, repo evidence, implementation choices, and verification, but do it in one compact instruction.
 - Detect stack from repo evidence.
 - Use existing tooling.
 - Make small scoped changes.
+- Start with the narrowest viable scope. Expand only when a narrower fix would preserve the root cause, violate an invariant or contract, duplicate logic, or create a temporary workaround; state the reason before expanding.
 - Preserve behavior unless changing it is explicit.
+- Use verification proportionate to change risk. When externally observable behavior changes and a suitable test layer exists, add or update the smallest focused regression test. Do not force persistent tests for generated, configuration-only, documentation-only, or mechanically verified changes.
 - Review diff before final.
+- Stop editing when the requested behavior works, relevant checks pass, the diff contains no unrelated changes, and no known correctness issue remains within scope.
 - Do not hallucinate APIs, flags, packages, commands, files, tests, or framework behavior.
 - When project context is missing, prompt the target agent to inspect the repo and sources instead of guessing.
 - Add scoped subagent instructions when they help repo mapping, docs verification, QA, UI checks, security review, or diff review.
+- For broad, risky, security-sensitive, migration, data, RAG/vector/cache, or cross-project porting tasks, mention an independent verification lane when feasible: separate terminal/context, baseline end-to-end or integration evals before changes, same evals after changes, compare before/after, and do not rely only on the implementer's self-review. Do not hardcode this for every small coding task.
 - Do not add broad generic guardrails just because the task is technical.
 - Do not broad rewrite without reason.
 - Live verify when possible.
@@ -228,21 +294,30 @@ Load `references/prompt-pattern-library.md` and `references/domain-prompt-patter
 
 For important prompts:
 
-1. Define success criteria.
-2. Create 3 to 5 representative cases.
-3. Run prompt.
-4. Compare output to criteria.
-5. Find failure pattern.
-6. Patch minimally.
-7. Retest.
+1. Define success criteria and representative cases.
+2. Run the platform default or no-custom-prompt baseline.
+3. Run a minimum-effective variant.
+4. Run the proposed candidate on the same cases.
+5. Compare task success, false constraints, unsupported specificity, token cost, and domain-specific quality.
+6. Find the failure pattern and patch minimally.
+7. Ablate instruction groups and retest.
 
-No perfect prompt. Iterate like engineering.
+No perfect prompt. A shorter prompt may win. Iterate like engineering.
 
-Load `references/evals-and-iteration.md`.
+Load `references/evals-and-iteration.md`; for system prompts also load `references/system-prompt-evals.md`.
+
+## Optional deterministic helpers
+
+Use scripts when they improve repeatability:
+
+- `scripts/make_prompt_eval.py` -> create a JSON starter manifest for baseline, minimal, candidate, representative cases, metrics, and ablation.
+- `scripts/test_prompt_tools.py` -> run regression tests for the eval helper after maintenance.
+
+Run the helper on representative prompt variants before relying on its manifest.
 
 ## Final answer behavior
 
-- Normal prompt request -> output only the finished prompt unless explanation is requested; include the Ponytail + Caveman block when the prompt is for technical/agentic execution.
+- Normal prompt request -> output only the finished prompt unless explanation is requested; include the Ponytail + Caveman block for technical/agentic task execution, but not automatically for system/developer prompts.
 - Prompt improvement -> improved prompt + short fix list.
 - Autoprompt normal task -> answer the task; do not show internal prompt unless asked.
 - Skill maintenance -> concise plain text: what changed, validation status, and real blockers or risks only. No rigid multi-section report unless the user asks for one.

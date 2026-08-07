@@ -74,17 +74,17 @@ For coding prompts with incomplete project information:
 Do not guess repo structure, files, functions, packages, APIs, commands, tests, env vars, or framework behavior.
 Inspect repo and current official docs when needed.
 Find the relevant code, callers, contracts, tests, and conventions before editing.
-Then implement the smallest safe change.
+Then implement the smallest semantically complete safe change.
 ```
 
-## Ask/Plan before Code
+## Plan before implementation
 
 For large/risky changes:
 
 ```text
-First work in Ask/Plan mode. Do not edit yet.
+First plan without editing.
 Map repo -> affected files -> risks -> small plan.
-Then implement the smallest safe slice.
+Then implement the smallest semantically complete safe slice.
 ```
 
 Use for:
@@ -103,6 +103,14 @@ Use for:
 ## Subagent default
 
 For generated coding prompts, include subagent guidance only when it helps. Useful subagents: repo mapper, docs verifier, QA/test agent, UI/browser agent, security/review agent, and diff reviewer. Keep one primary implementation owner. Subagents gather evidence or review; they do not replace ownership or invent unsupported implementation details.
+
+## Semantic minimality default
+
+- Optimize for the smallest semantically complete change, not the smallest textual diff or fewest lines.
+- Fix the root cause and preserve required behavior.
+- Start narrow; expand scope only when a narrow patch would violate an invariant or contract, duplicate logic, preserve the root cause, or create a temporary workaround.
+- Use verification proportionate to risk. Add focused regression coverage when behavior changes and a suitable test layer exists.
+- Stop editing when the requested outcome is proven, relevant checks pass, and the diff has no unrelated changes.
 
 ## Live verification default
 

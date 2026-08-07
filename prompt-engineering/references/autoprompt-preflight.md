@@ -8,6 +8,8 @@ Turn any user request into a stronger internal task brief before answering or us
 
 Do not show the internal prompt unless the user asks.
 
+Before adding factual detail, classify context: C0 rough request, C1 partial supplied evidence, or C2 inspected source/environment. Never make the internal brief look complete by inventing facts.
+
 ## Routing rule
 
 Do not let this skill become a parasite that blocks better tools.
@@ -18,7 +20,8 @@ Examples:
 
 - User asks for a spreadsheet -> internal prompt -> spreadsheet skill/tool.
 - User asks for a PDF -> internal prompt -> PDF skill/tool.
-- User asks for coding repo work -> internal prompt -> coding-agent contract / repo tools.
+- User asks for a system/developer prompt -> minimum-effective system-prompt workflow + eval plan.
+- User asks for coding repo work -> classify C0/C1/C2 -> coding-agent contract / repo tools.
 - User asks for image edit -> internal prompt -> image tool.
 - User asks for factual current info -> internal prompt -> web/search.
 
@@ -85,3 +88,5 @@ Before answering:
 - Do not ask avoidable clarifying questions.
 - Do not ignore specific tools because this skill triggered.
 - Do not turn every tiny task into a giant prompt.
+- Do not add files, functions, frameworks, commands, sources, dates, people, or other specifics that were not supplied or verified.
+- Do not make a custom system prompt larger than the behavior gap it must fix.

@@ -8,6 +8,16 @@ Rules that repeat belong in files, not every chat prompt.
 
 Keep them short, concrete, scoped, and version-controlled.
 
+## Evidence gate
+
+Do not generate a supposedly project-specific instruction file from a rough request alone.
+
+- C0: no repository inspected -> return a discovery checklist or clearly marked fill-in template. Do not assert commands, paths, architecture, dependencies, test runners, or conventions.
+- C1: partial supplied context -> include exact supplied facts, mark unverified entries, and tell the target agent to confirm them.
+- C2: repository inspected -> write verified commands, paths, conventions, and gotchas.
+
+A wrong persistent instruction file is worse than no file because every future task inherits the error. Prefer fewer verified lines over comprehensive-looking fiction.
+
 ## AGENTS.md
 
 For Codex and other agents that read AGENTS.md.
@@ -16,16 +26,17 @@ For Codex and other agents that read AGENTS.md.
 # Project instructions
 
 ## Commands
-- Install: [command]
-- Run: [command]
-- Test: [command]
-- Lint: [command]
-- Typecheck: [command]
+<!-- Fill only from package scripts, docs, CI, or commands that were actually verified. -->
+- Install: [verified command]
+- Run: [verified command]
+- Test: [verified command]
+- Lint: [verified command]
+- Typecheck: [verified command]
 
 ## Architecture
-- Main entry point: [path]
-- Important folders: [paths]
-- Do not touch: [paths / generated files]
+- Main entry point: [verified path]
+- Important folders: [verified paths]
+- Do not touch: [verified paths / generated files]
 
 ## Coding style
 - Follow existing patterns.
@@ -159,3 +170,5 @@ Use `CONVENTIONS.md` for repeated rules:
 - giant architecture essay
 - stale commands
 - rules that contradict each other
+- guessed commands, paths, frameworks, architecture, or test setup presented as project facts
+- generic UI taste imposed on every feature without project or brand evidence

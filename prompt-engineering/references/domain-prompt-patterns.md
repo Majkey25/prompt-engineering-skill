@@ -53,7 +53,7 @@ Include:
 - labels
 - examples
 - null handling
-- confidence
+- confidence policy when the schema defines one
 - validation
 
 ```text
@@ -63,7 +63,7 @@ Schema -> {...}
 Rules:
 - preserve original wording where possible
 - missing -> null
-- uncertain -> add confidence < 0.7
+- represent uncertainty only through a schema-defined field; otherwise use null
 - no invented fields
 Examples -> [2-3 if label mapping matters]
 Output -> valid JSON only.
@@ -92,7 +92,9 @@ Output -> recommendation / why / tradeoffs / risks / next action.
 
 ## Image prompt
 
-Include:
+Load `image-video-prompts.md` for generation, editing, reference composition, diagrams, text-heavy layouts, and model-specific visual restraint. Start with a direct 1 to 3 sentence scene or edit request when that is enough.
+
+Include only when material:
 
 - subject
 - composition
@@ -108,7 +110,7 @@ Include:
 
 ```text
 Goal -> generate image.
-Talk caveman -> compact, visual terms only.
+Use compact natural visual language. Do not inject the technical Ponytail or Caveman contract.
 Subject -> [main subject]
 Composition -> [framing / layout / focal point]
 Style -> [medium / era / rendering]
@@ -121,10 +123,11 @@ Output -> one image prompt, no commentary.
 
 ## Video prompt
 
-Include:
+Load `image-video-prompts.md`. Use timing beats only when timing matters.
+
+Include only when material:
 
 - scene
-- duration
 - camera motion
 - subject motion
 - timing beats
@@ -133,7 +136,7 @@ Include:
 - negatives
 
 ```text
-Goal -> generate [duration] video.
+Goal -> generate video.
 Scene -> [where / who / mood]
 Camera -> [movement / lens / framing]
 Action beats -> 0-2s [...], 2-5s [...]
@@ -141,6 +144,8 @@ Style -> [look]
 Negative -> [avoid]
 Output -> video prompt only.
 ```
+
+Pass duration and aspect ratio as tool arguments when supported.
 
 ## Study / tutoring
 
@@ -188,7 +193,9 @@ Done -> owner can run without guessing.
 
 ## System prompt / assistant behavior
 
-Include:
+Load `system-prompt-architecture.md` and `system-prompt-evals.md`. Start from baseline behavior and write only durable cross-task rules. Do not use this compact pattern as permission to add task data, guessed project details, or a generic frontend aesthetic.
+
+Include only when required:
 
 - role
 - scope

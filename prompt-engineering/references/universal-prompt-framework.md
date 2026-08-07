@@ -4,6 +4,10 @@ Use for any non-coding prompt unless a domain-specific template fits better.
 
 Load `best-prompt-blueprint.md` first when the user asks what an ideal prompt should look like or wants complete prompt documentation.
 
+Treat the template as a menu. Omit unused sections. Never fill placeholders with invented context merely to make the prompt look complete. Classify evidence as C0, C1, or C2 before adding factual specificity.
+
+Do not use this framework for system prompts, coding-agent prompts, or image/video prompts when their dedicated references fit better.
+
 ## Universal prompt template
 
 ```text
@@ -19,8 +23,9 @@ Load `best-prompt-blueprint.md` first when the user asks what an ideal prompt sh
 # Context
 Audience: [who uses output]
 Use: [why output matters]
-Known facts: [facts]
-Unknowns: [what to verify or ask]
+Known facts: [only supplied or verified facts]
+Inferences: [labelled interpretations, if needed]
+Unknowns: [what to verify, inspect, ask only when necessary, or disclose]
 Sources: [docs/data if any]
 
 # Input
