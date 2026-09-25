@@ -72,7 +72,7 @@ Default output: a partially grounded prompt that labels known facts and unknowns
 
 ### C2: Verified project evidence
 
-The relevant repository state, files, configuration, tests, docs, design references, and runtime evidence were directly inspected, and that evidence is available to the prompt writer.
+You or a trusted source have directly inspected the relevant repository state, files, configuration, tests, docs, design references, and runtime evidence.
 
 Allowed:
 
@@ -119,6 +119,7 @@ Use this as the default when the prompt writer cannot inspect the project.
 
 @ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
 @caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
+@unslop / Use the Unslop skill as the final prose pass. Remove obvious AI phrasing, filler, puffery, sycophancy, fake emphasis, canned transitions, vague claims, and robotic structure. Prefer plain, specific, human wording. Preserve exact technical names, code, schemas, quotations, and required output constraints. Do not make terse technical output chattier just to add personality.
 
 # Known requirements
 - [Only requirements explicitly supplied by the user.]
@@ -147,14 +148,12 @@ Use this as the default when the prompt writer cannot inspect the project.
 - Report exact evidence or the exact blocker.
 
 # Done
-The requested outcome works, relevant existing behavior is preserved, verification is complete, and the diff contains no unrelated changes. If verification is blocked, report the task as incomplete with the exact blocker; do not call it done.
+The requested outcome works, relevant existing behavior is preserved, verification is complete or precisely blocked, and the diff contains no unrelated changes.
 ```
 
 Remove unused sections. Do not fill them with guesses to make the prompt look complete.
 
 ## C1 partially grounded template
-
-Insert the shared Ponytail + Caveman contract immediately after `# Goal`; it is omitted below to avoid duplicating the source of truth in `SKILL.md`.
 
 ```text
 # Goal
@@ -180,7 +179,7 @@ Insert the shared Ponytail + Caveman contract immediately after `# Goal`; it is 
 
 ## C2 project-grounded template
 
-For risky production work, use the full coding-agent template after relevant evidence is available. Include:
+Use the full coding-agent template only after relevant evidence is available. Include:
 
 - verified target paths and symbols
 - observed current behavior

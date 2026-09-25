@@ -1,5 +1,7 @@
 # Domain Prompt Patterns
 
+Apply the `unslop` skill as the final prose pass for every human-readable prompt produced from these patterns. Skip literal `@unslop` injection only when the target format is exact JSON, code-only, image/video prompt text, or another strict machine-readable schema.
+
 ## Writing / editing
 
 Include:
@@ -53,7 +55,7 @@ Include:
 - labels
 - examples
 - null handling
-- confidence policy when the schema defines one
+- confidence
 - validation
 
 ```text
@@ -63,7 +65,7 @@ Schema -> {...}
 Rules:
 - preserve original wording where possible
 - missing -> null
-- represent uncertainty only through a schema-defined field; otherwise use null
+- uncertain -> add confidence < 0.7
 - no invented fields
 Examples -> [2-3 if label mapping matters]
 Output -> valid JSON only.
@@ -128,6 +130,7 @@ Load `image-video-prompts.md`. Use timing beats only when timing matters.
 Include only when material:
 
 - scene
+- duration
 - camera motion
 - subject motion
 - timing beats
@@ -136,7 +139,7 @@ Include only when material:
 - negatives
 
 ```text
-Goal -> generate video.
+Goal -> generate [duration] video.
 Scene -> [where / who / mood]
 Camera -> [movement / lens / framing]
 Action beats -> 0-2s [...], 2-5s [...]
@@ -144,8 +147,6 @@ Style -> [look]
 Negative -> [avoid]
 Output -> video prompt only.
 ```
-
-Pass duration and aspect ratio as tool arguments when supported.
 
 ## Study / tutoring
 

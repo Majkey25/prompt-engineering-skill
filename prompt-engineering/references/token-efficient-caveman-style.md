@@ -1,102 +1,50 @@
-# Token Efficient Ponytail + Caveman Style
+# Token Efficient Prompt Style
 
-Use to reduce cost, latency, implementation bloat, and context bloat without weakening the task.
+Use to reduce prompt and response bloat without weakening the work contract.
 
-Use Ponytail + Caveman together for generated coding, repo, automation, workflow, technical-research, and prompt-audit task-execution prompts. Use only Caveman for non-coding prompts where implementation minimalism is irrelevant. For system/developer prompts, keep only durable validated semantics; do not mechanically paste the block.
-
-Do not force it into:
-
-- creative writing
-- customer-facing prose
-- legal or medical wording
-- exact JSON output
-- user-visible copy where tone matters more than tokens
-
-## Required task-execution block
-
-For coding, repo, automation, workflow, technical research, and prompt-audit task-execution prompts, add:
-
-```text
-@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
-```
-
-For non-coding prompts where only terse style is needed, add only:
-
-```text
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
-```
+Apply Ponytail, Caveman, and Unslop as authoring behavior. Do not automatically paste literal skill directives into generated prompts.
 
 ## What to compress
 
 Compress:
 
-- greetings
-- filler
-- motivational language
-- repeated explanations
-- long prose transitions
-- obvious statements
-- verbose headings
+- greetings and filler,
+- repeated rules,
+- motivational language,
+- verbose transitions,
+- obvious procedural narration,
+- duplicated context,
+- headings that do not improve parsing.
 
 Do not compress away:
 
-- constraints
-- success criteria
-- verification
-- safety rules
-- edge cases
-- schemas
-- exact commands
-- exact file paths
-- exact API names
-- Ponytail requirements: stdlib/native/existing deps first, no speculative abstractions, no unverified current APIs
+- outcome,
+- scope and authorization boundaries,
+- relevant evidence/context,
+- done criteria,
+- verification requirements,
+- safety constraints,
+- schemas or exact literals,
+- uncertainty/failure behavior when material.
+
+## Compact agent pattern
+
+```text
+Goal -> fix login bug end-to-end.
+Context -> [facts]; suspicion: [hypothesis].
+Scope -> only directly related changes; preserve existing auth behavior.
+Authority -> choose implementation/tools; ask before destructive/external actions.
+Done -> root cause fixed + login works + relevant checks pass + no unrelated diff.
+Verify -> strongest existing checks + real login flow where practical.
+Final -> concise summary + verification + real blockers only.
+```
+
+This is better than compressing the prompt into vague fragments such as `fix app fast. test maybe.`
 
 ## Symbols
 
-Use symbols when readable:
+Use `->`, `=>`, `+`, `/`, and `[]` only when they make the prompt easier to scan. Do not turn normal prose into notation if readability gets worse.
 
-- `->` sequence
-- `=>` consequence/result
-- `+` include/and
-- `/` alternatives or paired concepts
-- `[]` placeholders
-- `<=` limits
-- `!=` not equal / forbidden
+## Literal directives
 
-Example:
-
-```text
-Goal -> fix dashboard route.
-Ponytail -> minimal diff; existing deps first; verify current APIs before use.
-Keep -> UI/layout/colors unchanged.
-Verify -> run app + Playwright + console/network check.
-Done => changed flow works + old flow still works.
-```
-
-## Bad compression
-
-Bad:
-
-```text
-fix app fast. test maybe. done.
-```
-
-Good:
-
-```text
-Goal -> fix login bug.
-Scope -> minimal files.
-Verify -> reproduce bug, fix root cause, run existing checks, test login live.
-Stop -> no fake done; report blocker if cannot run.
-```
-
-## Agent final replies
-
-When prompting an agent and terse output is desired, require:
-
-```text
-Final reply: concise.
-Include only: summary, files, verification, risks.
-No filler. No fake certainty.
-```
+If the user explicitly asks to embed Ponytail/Caveman/Unslop, load `ponytail-caveman-contract.md` and use the compact optional block there.

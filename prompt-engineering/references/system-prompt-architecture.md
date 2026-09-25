@@ -126,7 +126,7 @@ State this policy once. Repeating permission warnings can make capable agents un
 
 ### Tool policy
 
-Describe selection rules and side effects, not every obvious operation.
+Describe selection rules, evidence expectations, and side effects, not every obvious operation or tool-call sequence. Give the agent room to choose the path unless the product requires a specific sequence.
 
 ```text
 Use tools when they provide evidence or complete requested work. Read before writing. Inspect tool results before choosing the next action. Do not invent tool outputs or unsupported parameters.
@@ -199,7 +199,7 @@ Do not add instructions that:
 - force a frontend aesthetic unrelated to the user or project
 - solve one historic failure at the expense of normal cases
 
-Prefer outcome, boundaries, evidence, and done criteria over choreography.
+Prefer outcome, boundaries, evidence, decision authority, and done criteria over choreography. For action-capable agents, durable system behavior may say to follow through to completion, but task-specific implementation steps belong in the current user/task layer.
 
 ## Compact templates
 
@@ -264,3 +264,8 @@ When the user requests an audit, design rationale, implementation package, or pr
 4. Requirements that should be enforced outside the prompt
 5. Eval cases and comparison plan
 6. Known risks or unresolved conflicts
+
+
+## Final prose pass
+
+Apply the `unslop` skill to finished human-readable prompt text. Preserve exact schemas, code, quotations, commands, and other literal output constraints.

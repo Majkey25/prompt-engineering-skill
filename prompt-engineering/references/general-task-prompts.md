@@ -27,14 +27,14 @@ Separate:
 ## Minimal general prompt
 
 ```text
-Task: [exact deliverable]
-Context: [relevant supplied or verified facts]
-Constraints: [must / must not]
+Outcome: [what should be true when finished]
+Context: [relevant supplied/verified facts; label hypotheses]
+Boundaries: [must / must not / non-goals]
+Done: [observable success criteria]
 Output: [format, audience, length]
-Check: [one or more observable success criteria]
 ```
 
-Use this unless the task needs a narrower pattern below.
+Use this unless the task needs a narrower pattern below. Do not add a step-by-step process unless the order or method is part of the requirement.
 
 ## Writing and editing
 
@@ -80,8 +80,9 @@ Use deterministic structured-output features when available instead of relying o
 ## Classification
 
 ```text
-Classify each input into exactly one declared label: [labels, including other or unknown when unsupported cases must be represented].
+Classify each input into exactly one of: [labels].
 Definitions: [decision boundaries].
+If no label is supported, use [other/unknown].
 Return [schema] with label, confidence, and short evidence.
 ```
 
@@ -110,7 +111,7 @@ Do not invent organizational facts, dates, or resources.
 Return the smallest sequence that reaches the outcome.
 ```
 
-For workflows, include exception paths and handoffs only when operationally relevant.
+For workflows, include exception paths and handoffs only when operationally relevant. If the target can execute the work, give it the outcome and decision boundaries first; let it choose the method unless the procedure must be fixed.
 
 ## Teaching and study
 
@@ -140,7 +141,7 @@ Return [format and length].
 Translate from [source language] to [target language] for [audience/use].
 Preserve meaning, names, numbers, formatting, and terminology.
 Use [formal/informal/domain] register.
-Preserve ambiguity when possible. If a choice is unavoidable, use the least assumptive wording.
+Flag ambiguous source phrases instead of silently inventing meaning.
 Return translation only unless notes are requested.
 ```
 
@@ -173,4 +174,9 @@ Do not overconstrain early exploration. Separate divergent ideation from later s
 
 When the user asks for a prompt, return the final prompt only unless they request explanation, variants, or an audit.
 
-When improving a prompt, preserve valid requirements. Do not add invented context merely to make the prompt look more complete.
+When improving a prompt, preserve valid requirements. Do not add invented context merely to make the prompt look more complete. Treat user implementation ideas as hypotheses unless they are explicitly mandatory, and do not turn them into a forced process without evidence.
+
+
+## Final prose pass
+
+Apply the `unslop` skill to finished human-readable prompt text. Preserve exact schemas, code, quotations, commands, and other literal output constraints.

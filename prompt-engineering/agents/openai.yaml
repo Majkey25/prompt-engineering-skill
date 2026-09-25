@@ -1,13 +1,14 @@
 interface:
-  display_name: "Prompt Engineering"
-  short_description: "Build lean, evidence-calibrated prompts and evals"
-  default_prompt: "Use $prompt-engineering to create the minimum effective prompt, calibrate specificity to available evidence, and define how to verify it."
-  icon_small: "./assets/icon.svg"
-  icon_large: "./assets/icon.svg"
+  display_name: Prompt Engineering
+  short_description: Build lean, evidence-calibrated prompts and evals
+  default_prompt: Use $prompt-engineering to create the minimum effective prompt,
+    calibrate specificity to available evidence, and define how to verify it.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
 policy:
   allow_implicit_invocation: true
   products:
-    - "chatgpt"
-    - "codex"
-    - "api"
-    - "atlas"
+  - chatgpt
+  - codex
+  - api
+  - atlas

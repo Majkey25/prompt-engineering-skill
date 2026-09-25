@@ -154,10 +154,29 @@ When baseline or minimal wins, use it. A blank or short prompt is a valid result
 
 ## Eval manifest shape
 
-Generate the canonical starter manifest instead of maintaining a duplicate schema here:
-
-```bash
-python scripts/make_prompt_eval.py --type system --out prompt-eval.json
+```json
+{
+  "prompt_type": "system",
+  "target_model": "model-id",
+  "variants": ["baseline", "minimal", "candidate"],
+  "metrics": [
+    "task_success",
+    "requirement_adherence",
+    "false_constraint_rate",
+    "unsupported_specificity",
+    "verification",
+    "token_cost"
+  ],
+  "cases": [
+    {
+      "id": "normal-1",
+      "input": "...",
+      "required": ["..."],
+      "forbidden": ["..."],
+      "notes": "..."
+    }
+  ]
+}
 ```
 
-It emits baseline, minimal, and candidate variant objects; metrics; scoring rules; protocol; representative cases; runs; and a decision record. Existing output files are never overwritten.
+Use `scripts/make_prompt_eval.py` to create a starter manifest.

@@ -1,152 +1,109 @@
 # Karpathy First Agentic Engineering
 
-Use for coding-agent prompts, repo work, /goal prompts, migrations, refactors, bug fixes, UI work, and production-quality software prompts.
+Use for coding-agent prompts, repo work, `/goal`, migrations, refactors, bug fixes, UI work, and production-quality software prompts.
 
 ## Core doctrine
 
-Karpathy's strongest useful signal is not "let AI write unchecked code". It is the boundary between playful prototype flow and serious engineering.
+Fast AI coding is useful. Production work still needs ownership, scope discipline, evidence, verification, and review.
 
-- Vibe coding -> fast prototype loop. Good for demos, throwaway scripts, learning, and creative exploration.
-- Agentic engineering -> production loop. Requires specs, repo evidence, planning, diff review, verification, ownership, and maintenance.
-
-Generated prompts must push real software work toward agentic engineering by default.
+The prompt should define the engineering contract, not hand-write the agent's implementation path.
 
 ## Production default
 
-For real repos, user-facing apps, migrations, auth, billing, data, security, deployment, refactors, UI preservation, backend APIs, performance, or anything the user may keep:
+For real repositories and user-facing work:
 
 ```text
-Mode -> production.
-No blind vibe coding.
-Use highest available reasoning effort. Do not expose private chain-of-thought.
-Specs -> repo evidence -> plan -> small change -> inspect diff -> verify live -> fix -> short report.
-You own result. Do not say done because code was generated.
+Own the requested outcome through completion.
+Inspect the real repository before choosing implementation details.
+Use the smallest semantically complete safe change consistent with existing project patterns.
+Stay within scope. Do not add unrelated cleanup or features.
+Verify the changed behavior with the strongest relevant existing checks and real workflow where practical.
+Do not claim done without evidence or an exact blocker.
 ```
+
+Do not add "use highest reasoning effort", hidden chain-of-thought requests, or a mandatory plan unless the target runtime or task specifically requires them.
 
 ## Prototype exception
 
-Only use this when user explicitly wants a quick prototype, throwaway demo, toy app, sketch, or experiment:
-
 ```text
-Mode -> prototype.
-Optimize for speed + visible result.
-Still avoid secrets, destructive actions, fake APIs, unsafe commands, and broken install steps.
-Report shortcuts + missing checks.
+Mode: prototype. Optimize for a working visible result with minimal machinery. Keep secrets and destructive actions safe. Report shortcuts and missing verification.
 ```
+
+Use only when the user explicitly wants a prototype, demo, sketch, or throwaway experiment.
 
 ## The prompt is code
 
-Treat prompts like source code:
+Treat important prompts like source code:
 
-- version important prompts
-- make them scoped
-- remove vague lines
-- add success criteria
-- add verification
-- test against examples
-- refactor when repeated
-- move durable rules into repo instruction files or skills
+- keep them scoped,
+- version when business-critical,
+- remove vague and duplicate rules,
+- add observable success criteria,
+- test against representative cases,
+- delete rules that no longer improve outcomes.
 
 ## Human ownership
 
-Generated coding prompts must say:
-
-```text
-AI can write code. Human still owns architecture, taste, security, data safety, and final judgment.
-Review the diff. Do not accept generated changes blindly.
-```
+Do not paste generic "human owns everything" boilerplate into every prompt. Preserve real approval boundaries and require review where risk warrants it.
 
 ## Diff review gate
 
-Include in every coding-agent prompt:
+For code-changing tasks, a compact self-review is useful:
 
 ```text
-After edits, review your own diff before final answer.
-Look for bloat, repetition, accidental rewrites, style drift, weak abstractions, fake APIs, changed behavior, missed edge cases, security risk, and visual mismatch.
-Fix safe issues before finishing.
+Before finishing, inspect the final diff for unrelated churn, regressions, unnecessary abstractions, missing validation, fake APIs, and unverified assumptions. Fix safe in-scope issues, then stop.
 ```
 
 ## Missing context
 
-For coding prompts with incomplete project information:
-
 ```text
-Do not guess repo structure, files, functions, packages, APIs, commands, tests, env vars, or framework behavior.
-Inspect repo and current official docs when needed.
-Find the relevant code, callers, contracts, tests, and conventions before editing.
-Then implement the smallest semantically complete safe change.
+Do not guess repo structure, files, functions, packages, APIs, commands, tests, env vars, or framework behavior. Inspect the relevant code, project instructions, callers/contracts, nearby patterns, and existing checks before choosing the implementation.
 ```
 
-## Plan before implementation
+## Planning
 
-For large/risky changes:
+Planning is conditional.
+
+Require a brief plan before editing when architecture, migrations, auth, billing, security, data, deployment, or other broad/high-risk behavior makes sequencing and review valuable.
+
+For small scoped tasks, do not force a plan. Let the agent inspect and execute.
+
+## Subagents
+
+Do not prescribe delegation by default. Let capable agents choose whether subagents help.
+
+Constrain delegation only when:
+
+- independent workstreams should be isolated,
+- parallel work has real leverage,
+- an independent review lane is required,
+- or evals show over-delegation/under-delegation.
+
+## Semantic minimality
+
+- Optimize for smallest **semantically complete** change, not smallest line count.
+- Fix root cause and preserve required behavior.
+- Expand scope only for correctness/contract reasons.
+- Stop when the requested outcome is proven and the diff is clean.
+
+## Verification
+
+Ask for the evidence standard, not a universal command list:
 
 ```text
-First plan without editing.
-Map repo -> affected files -> risks -> small plan.
-Then implement the smallest semantically complete safe slice.
+Verify using the project's strongest relevant existing checks and the real affected workflow/runtime where practical. Match depth to risk. Report exact blockers when verification cannot run.
 ```
 
-Use for:
+Name exact commands or tools only when supplied, verified, or required.
 
-- migrations
-- architecture changes
-- broad refactors
-- security hardening
-- auth/session changes
-- payment/billing
-- database/data model
-- deployment/infrastructure
-- UI preservation/pixel matching
-- performance work
+## Anti-vibe translations
 
-## Subagent default
+- "vibe code this" -> define whether this is prototype or production and what done means
+- "make production ready" -> define observable behavior, risk boundaries, and verification
+- "just fix it" -> define broken vs expected behavior, scope, and done state
+- "refactor everything" -> narrow the desired outcome and preservation contract
+- "make UI better" -> define the visual/product outcome and reference truth
 
-For generated coding prompts, include subagent guidance only when it helps. Useful subagents: repo mapper, docs verifier, QA/test agent, UI/browser agent, security/review agent, and diff reviewer. Keep one primary implementation owner. Subagents gather evidence or review; they do not replace ownership or invent unsupported implementation details.
+## Final response target
 
-## Semantic minimality default
-
-- Optimize for the smallest semantically complete change, not the smallest textual diff or fewest lines.
-- Fix the root cause and preserve required behavior.
-- Start narrow; expand scope only when a narrow patch would violate an invariant or contract, duplicate logic, preserve the root cause, or create a temporary workaround.
-- Use verification proportionate to risk. Add focused regression coverage when behavior changes and a suitable test layer exists.
-- Stop editing when the requested outcome is proven, relevant checks pass, and the diff has no unrelated changes.
-
-## Live verification default
-
-Generated prompts must require real checks where possible:
-
-- run app/dev server/preview/backend/CLI
-- run relevant build/lint/typecheck/test commands
-- click UI with browser tools when UI is involved
-- inspect console/network/server logs
-- verify changed path and nearby old path
-- report exact blocker if verification cannot run
-
-## Anti-vibe replacements
-
-Replace weak prompts:
-
-- "vibe code this" -> "prototype quickly; list shortcuts + missing checks"
-- "make production ready" -> "run build/lint/typecheck/live flow; fix scoped runtime errors; verify main path; report blockers"
-- "just fix it" -> "reproduce issue -> root cause -> minimal fix -> verify broken path + nearby old path"
-- "refactor everything" -> "scope refactor targets -> preserve behavior -> change minimal files -> verify"
-- "make UI better" -> "define visual target -> preserve or change specified parts -> screenshot verify"
-
-## Failure patterns to guard against
-
-- accepting every diff
-- not reading generated code
-- shipping demo-quality code as production
-- giant context dump
-- broad rewrite without plan
-- fake API/package names
-- fixing tests instead of bug
-- suppressing errors
-- no rollback path
-- no live verification
-- no final risk report
-
-## Final response target for coding agents
-
-Require one short paragraph or at most 3 bullets, not a rigid report template. Include what changed, what was verified, and real blockers or risks only. Exact commands, screens, flows, endpoints, or URLs are useful when they prove verification. Skip empty sections and filler.
+Ask for a concise recap of what changed and what was verified. Mention blockers/risks only when real. Do not force a rigid multi-heading report unless the user needs it.

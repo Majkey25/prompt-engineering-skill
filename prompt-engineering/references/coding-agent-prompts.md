@@ -1,216 +1,237 @@
 # Coding Agent Prompt Template
 
-Use for Codex, Claude Code, Cursor agent, Copilot agent, Windsurf, Aider, ChatGPT agent, MCP agents, browser agents, and repo tasks.
+Use for Codex, Claude Code, Cursor agents, Copilot agents, Windsurf, Aider, ChatGPT agents, MCP/browser agents, and repository implementation tasks.
 
-Default stance: Karpathy-first agentic engineering + Ponytail minimalism + Caveman brevity. Fast AI is useful. Blind vibe coding is not acceptable for production work. Missing repo context must be discovered, not invented.
+The default is outcome-first agentic engineering. Give the agent the job, evidence, boundaries, and done state. Let it choose the implementation path unless the path itself is a requirement.
 
 ## Mandatory context gate
 
-Before writing the prompt, classify the prompt writer's evidence. Load `coding-context-calibration.md` for the full rules.
+Load `coding-context-calibration.md` and classify prompt-writer evidence:
 
-- C0: no repository or authoritative project source inspected. Keep the prompt outcome-focused and discovery-first. Do not prescribe files, functions, frameworks, packages, commands, test tools, architecture, routes, data flow, or visual design unless the user explicitly supplied them.
-- C1: partial supplied evidence. Preserve exact supplied facts, label implementation theories as hypotheses, and require the target agent to verify them.
-- C2: relevant repository or source evidence directly inspected. Use verified project specifics when they reduce search or risk.
+- C0: no repository or authoritative project source inspected. State desired behavior and discovery targets. Do not invent project details.
+- C1: partial supplied evidence. Preserve exact supplied facts and label implementation theories as hypotheses.
+- C2: relevant repository/source evidence directly inspected. Use verified specifics only where they help.
 
-The engineering guardrails below remain valid at every level. Context calibration controls factual specificity, not rigor.
+## Default copy-paste template
 
-## Copy-paste template
-
-This is the full template. Use it for risky production work after applying the C0/C1/C2 gate. For normal scoped coding tasks, compress it to a clean prompt with: Goal, context/unknowns, repo inspection, implementation rules, verification, and short final response. Do not dump every section when the task does not need it. At C0, omit project-specific placeholders rather than filling them with guesses.
+Use this compact form for most coding tasks:
 
 ```text
 # Goal
-[Specific outcome. Include target stack only when the user supplied it or repository evidence verified it. State scope and what must stay unchanged.]
-
-@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
-
-# Mode
-Production unless I explicitly say prototype.
-Use the highest available reasoning effort. Think through repo evidence, implementation choices, verification, and risks before editing. Do not expose private chain-of-thought.
-No blind vibe coding.
-Use AI speed + engineering discipline.
-Specs -> repo evidence -> plan -> small changes -> diff review -> live verification -> short final report.
+[Describe the externally observable result. State what must remain unchanged when relevant.]
 
 # Context
-Evidence level: [C0 / C1 / C2]
 Known:
-- [Only facts directly supplied by the user or directly observed from repository/source evidence. Note the source when useful.]
-- [User constraints and required behavior.]
-- [Relevant files/routes/screenshots/errors only when supplied or verified.]
+- [user-supplied or verified facts]
+
 Hypotheses:
-- [Keep implementation theories here until repository evidence confirms them.]
-Unknown:
-- Mark unknowns. Find answers in repo, docs, logs, tests, or current official sources before assuming.
-- Do not invent file paths, function names, architecture, APIs, commands, env vars, test setup, or UI implementation details.
+- [suspected root cause / implementation idea; omit if none]
 
-# Non negotiable requirements
-- Detect real stack from repository files. No framework/tool/test-runner guesses.
-- Preserve existing behavior unless explicitly changed.
-- Preserve existing style, naming, architecture, and formatting conventions.
-- Change only files needed for this task.
-- No fake APIs, packages, commands, flags, routes, env vars, tests, files, or framework features.
-- If this prompt lacks implementation details, discover them from repo evidence instead of filling gaps with guesses.
-- Treat user-supplied implementation ideas as hypotheses unless they are explicit hard requirements. Verify the actual root cause and project pattern before following them.
-- Do not convert a desired UI outcome into a fixed palette, font, component pattern, animation library, or layout without product or repository evidence.
-- No broad rewrite without written reason + small plan.
-- No hardcoded secrets. No unsafe destructive commands.
-- Do not ask me to test what you can test.
-- Do not say done unless verified or exact blocker is documented.
+Unknowns:
+- Inspect the repository, docs, logs, tests, and runtime as needed. Do not invent project details.
 
-# Repository analysis
-Use this as a discovery checklist, not a claim that every repository contains every item.
-1. Read available README/docs and project instruction files.
-2. Inspect package files + lock files.
-3. Inspect config: build, lint, typecheck, test, framework, env examples, CI.
-4. Find entrypoints, routes, components, API clients, backend setup, data flow.
-5. Find the target function/feature, callers, tests, contracts, and nearby patterns before editing.
-6. Identify existing scripts and verification path.
-7. Summarize stack + affected files + risks before editing.
+# Boundaries
+- Stay within the requested scope. No unrelated refactors, cleanup, features, or dependency churn.
+- Treat implementation suggestions as hypotheses unless marked mandatory.
+- Preserve existing behavior, interfaces, style, and architecture unless the task requires a change.
+- Choose the files, implementation approach, tools, and delegation yourself based on repository evidence.
+- Ask before destructive, hard-to-reverse, externally visible, costly, or materially out-of-scope actions.
+- If ambiguity does not materially affect correctness, safety, authorization, or the requested outcome, choose the narrowest reasonable interpretation and proceed.
 
-# Plan before code
-Before editing:
-1. Restate task in <= 3 bullets.
-2. List affected files discovered from repo evidence.
-3. List risks and unknowns.
-4. Give small implementation plan.
-Then implement.
+# Done
+You are done when:
+- the real root cause or required change is understood,
+- the requested behavior works,
+- behavior that should remain unchanged still works based on relevant checks,
+- the strongest practical verification available has been performed,
+- the diff contains no unrelated changes,
+- and any remaining blocker or risk is stated concretely.
 
-# Subagent use
-Use subagents only when they reduce real risk or time.
-Good uses:
-- Repo mapper: locate files, data flow, callers, tests, conventions.
-- Docs verifier: check current official docs for APIs, packages, CLIs, models, or framework behavior.
-- QA/test agent: reproduce bug, run checks, inspect logs, verify workflows.
-- UI/browser agent: screenshots, console/network, responsive checks, affected flow.
-- Security/review agent: auth, secrets, permissions, destructive actions, risky data paths.
-- Diff reviewer: independent review for bloat, regressions, fake APIs, style drift, missed edge cases.
-Rules:
-- Tiny scoped change -> no subagents unless needed.
-- One primary owner keeps the plan and final decision.
-- Subagents gather evidence or review. They do not invent architecture.
-- Primary owner must synthesize findings and reject unsupported claims.
+Do not stop at a plan or explanation when implementation was requested. Continue while a safe, in-scope next action can complete or materially verify the task.
 
-# Implementation rules
-- Prefer existing tools/patterns.
-- Apply Ponytail: smallest semantically complete safe change, stdlib/native/existing deps first.
-- Keep changes minimal in semantic scope, not merely in line count or textual diff size.
-- Start with the narrowest viable scope. Expand only when a narrower fix would preserve the root cause, violate an invariant or contract, duplicate logic, or create a temporary workaround; state the reason before expanding.
-- Validate data at boundaries.
-- Keep error handling explicit.
-- Avoid formatting churn.
-- Do not add dependencies unless needed + justified with repo evidence + current official docs.
-- Verify after each major slice when practical.
-
-# Independent verification
-Use only when risk earns it: broad changes, migrations, security-sensitive work, data/RAG/vector/cache behavior, or cross-project porting. When feasible, run a separate terminal/process/context from the implementation flow. Run end-to-end or integration evals on the baseline before changes, run the same evals after changes, compare before/after behavior, and report regressions or unverifiable gaps. Do not make this mandatory for tiny scoped changes.
-
-# Live verification
-- Run existing install/setup only if needed.
-- Run existing build/lint/typecheck/test commands when relevant.
-- Start app/dev server/preview/backend/CLI if environment allows.
-- Verify changed workflow live.
-- Verify one nearby old workflow still works.
-- Investigate failures. Fix root cause, not symptom.
-- If verification cannot run, state exact command tried + exact blocker.
-
-# UI verification
-[Include for UI tasks]
-- Inspect the existing design system, components, assets, nearby screens, and interaction patterns before choosing implementation details.
-- Preserve the product's established visual language unless redesign is explicitly requested.
-- Do not impose generic cards, gradients, glassmorphism, a fixed palette, a font, an animation library, spacing values, or an exact layout without supplied or repository evidence.
-- For a genuinely greenfield UI with no style reference, optimize for coherent hierarchy, usability, accessibility, responsiveness, and product fit while leaving room for model design judgment.
-- Use Playwright / Playwright Interactive if available.
-- Capture baseline screenshot if original state can run.
-- Capture post-change screenshot.
-- Compare main screens visually against actual product/reference evidence, not invented taste rules.
-- Check console errors.
-- Check network failures.
-- Click through affected user flow.
-- Check responsive layout if relevant.
-- Do not redesign by taste if goal is preservation.
-
-# Testing rules
-- Use existing tests when relevant.
-- Add/update tests only when they reduce real risk and match repo patterns.
-- When externally observable behavior changes and a suitable test layer exists, add or update the smallest focused regression test.
-- Do not force persistent tests for generated, configuration-only, documentation-only, or mechanically verified changes.
-- Match verification depth to change risk; do not use a fixed ceremonial test count.
-- Pytest is not default. Use pytest only if repo already uses it, I ask for it, or pytest infra clearly exists.
-- Do not weaken tests to pass.
-
-# Strict diff/self review
-Before final answer, review your own diff like a demanding reviewer having a bad day.
-Find: bloat, repetition, fragile logic, hidden regressions, bad names, missing validation, broken edge cases, visual mismatch, unnecessary rewrites, weak abstractions, fake success, unverified assumptions, ignored errors, unrelated churn, and patches that are textually small but semantically incomplete.
-Fix every safe issue before finalizing. Do not continue with opportunistic cleanup once the requested outcome is proven.
-
-# Done definition
-Done only when:
-- Requested change is implemented.
-- Behavior that should remain unchanged still works based on checks.
-- Changed workflow was live verified. If verification is blocked, report the task as incomplete with the exact blocker.
-- Relevant build/lint/typecheck/test/browser/backend/CLI checks were run when available.
-- Diff was self-reviewed.
-- Diff contains no unrelated changes.
-- Requested behavior works, relevant checks pass, and no known correctness issue remains within scope.
-- Risks are explicit.
+# Verification
+Use the project's existing verification path and real runtime/workflow where practical. Choose checks proportionate to the change. Do not weaken tests or fake success. If verification cannot run, report the exact blocker.
 
 # Final response
-Return one short paragraph or at most 3 bullets. No rigid headings unless I ask. State what changed and what was verified. Mention blockers or risks only if real. Do not include filler, fake confidence, or a long ceremony.
+Keep it concise. State what changed, what was verified, and only real remaining blockers or risks.
 ```
 
-## Large change prepend
+This is the default, not a mandatory schema. Delete sections that add no value.
 
-Use for migrations, architecture changes, security, auth, payment, data model, performance, or UI preservation:
+## Exact-process exception
+
+Add step-by-step process only when the process itself matters, for example:
+
+- compliance or audit procedure,
+- irreversible migration ordering,
+- reproducible benchmark protocol,
+- required release sequence,
+- security approval boundary,
+- user-mandated workflow,
+- or a measured recurring failure that general outcome guidance does not fix.
+
+Do not write a step list merely because the model is capable of following one.
+
+## Repository discovery
+
+At C0/C1, give discovery targets rather than fake implementation detail.
+
+Good:
 
 ```text
-First plan without editing.
-Map repo -> identify risks -> propose plan.
-Then implement the smallest semantically complete safe slice.
-Continue while a clear safe next step improves confidence.
+Inspect the relevant implementation, callers, contracts, nearby patterns, tests, project instructions, and existing verification commands before choosing the fix.
 ```
 
-## Prototype prepend
-
-Only if user asks for quick prototype:
+Bad:
 
 ```text
-Mode -> prototype.
-Optimize for speed + visible result.
-Still avoid secrets, destructive actions, fake APIs, and broken install steps.
-Report shortcuts + missing checks.
+Edit src/foo.ts, change bar(), run npm test, then create three subagents.
 ```
+
+unless those exact details are supplied or verified requirements.
+
+Never speculate about code that the target agent can inspect.
+
+## Root-cause and hypothesis handling
+
+If the user says "I think X is the bug," preserve it as evidence, not truth:
+
+```text
+I suspect [X], but verify the actual root cause before choosing the implementation. Do not optimize for proving my theory.
+```
+
+This prevents the prompt from turning a useful suspicion into a false constraint.
+
+## Scope control
+
+Use outcome-level scope rules:
+
+```text
+Fix the requested problem completely, but do not add unrelated features, cleanup, abstractions, or redesigns. Expand scope only when a narrower change would leave the root cause intact, break a contract, or create a temporary workaround.
+```
+
+Avoid giant negative lists unless evals show a specific recurring failure.
+
+## Decision authority
+
+For normal implementation requests, let the agent own technical choices inside scope:
+
+```text
+Choose the implementation approach, files, tools, and any useful delegation yourself from repository evidence. Prefer the simplest safe solution consistent with existing project patterns.
+```
+
+Do not prescribe a fixed number of subagents, exact file list, or tool sequence unless required.
+
+## Clarification policy
+
+Prevent unnecessary stalls without authorizing risky guessing:
+
+```text
+Ask only when missing information could materially change correctness, safety, authorization, or the requested outcome. Otherwise choose the narrowest reasonable interpretation, state any important assumption briefly, and proceed.
+```
+
+## Planning
+
+Visible planning is optional, not ritual.
+
+Use a short plan before editing only when the task is broad, risky, migration-heavy, security-sensitive, or benefits from user review before changes. For small scoped fixes, let the agent inspect and act directly.
+
+When a plan is required, ask for decisions and risk, not ceremony:
+
+```text
+Before editing, briefly state the affected area, main risk, and chosen approach. Then continue with implementation unless approval is explicitly required.
+```
+
+## Subagents
+
+Modern agents may orchestrate delegation themselves. Default to giving them freedom to choose.
+
+Add explicit subagent instructions only when:
+
+- independent workstreams can run in parallel,
+- isolated context reduces risk,
+- an independent reviewer is required,
+- or evals show the agent delegates poorly.
+
+If over-delegation is a problem:
+
+```text
+Use subagents only for independent or parallel work that benefits from isolated context. For simple, sequential, single-file, or tightly coupled work, act directly.
+```
+
+## Verification
+
+Prompt for evidence, not a ceremonial command checklist.
+
+Default:
+
+```text
+Verify the changed behavior using the project's strongest relevant existing checks and the real workflow/runtime where practical. Match verification depth to risk. If a check is unavailable, report the exact blocker rather than claiming success.
+```
+
+Name exact commands, browsers, endpoints, screenshots, or test suites when:
+
+- the user requires them,
+- repository evidence confirms they are the correct path,
+- or they are part of the acceptance criteria.
+
+For UI work, browser verification and screenshots are useful when the runtime/tooling supports them. For APIs, use the real endpoint or integration path when practical. For migrations, compare before/after behavior when risk warrants it.
+
+## Tests
+
+Do not force a fixed test count or framework.
+
+- Use existing tests when relevant.
+- Add the smallest focused regression coverage when externally observable behavior changes and the repo has a suitable test layer.
+- Do not weaken or rewrite tests just to make the patch pass.
+- Do not invent a test runner.
+
+## Diff review
+
+A compact self-review instruction is usually enough:
+
+```text
+Before finishing, inspect the final diff for unrelated churn, incomplete root-cause fixes, regressions, unnecessary abstractions, fake APIs, missing validation, and unverified assumptions. Fix safe in-scope issues, then stop.
+```
+
+Do not ask for endless opportunistic cleanup.
+
+## Large/risky task add-on
+
+Use when architecture, auth, billing, data, deployment, migration, security, or broad behavior is involved:
+
+```text
+Before editing, map the affected contracts and risks from repository evidence. Choose the smallest safe sequence of changes. Preserve rollback/recovery where relevant. Verify incrementally and compare before/after behavior for high-risk paths.
+```
+
+## Prototype add-on
+
+Only when the user explicitly wants a prototype:
+
+```text
+Mode: prototype. Optimize for a working visible result with minimal machinery. Keep secrets and destructive actions safe. Report shortcuts and missing verification.
+```
+
+## Literal Ponytail/Caveman/Unslop directives
+
+Do not paste them automatically. Use the behaviors while authoring the prompt. Include literal `@ponytail`, `@caveman`, or `@unslop` lines only when the user requests them, the runtime consumes them, or evals show they help.
 
 ## Tool-specific notes
 
 ### Codex
-- For large work, plan first, then implement.
-- When the prompt writer cannot inspect the repository, keep the prompt outcome-focused and tell Codex to discover the implementation from repository evidence.
-- Use AGENTS.md when verified repo rules should persist. Do not prefill it with guessed commands, paths, or architecture.
-- Require terminal/log/test evidence when available.
+
+- Keep prompts outcome-first when the prompt writer has not inspected the repo.
+- Use AGENTS.md only for durable verified project rules.
+- Let the agent discover implementation details and existing checks.
 
 ### Claude Code
-- Use CLAUDE.md for durable verified project memory.
-- Keep CLAUDE.md short, specific, and useful; include only facts that cannot be inferred reliably from the repository.
-- Let Claude inspect the project instead of making the upstream prompt writer guess implementation details.
-- Give screenshots/tests/expected outputs so Claude can verify.
-- Manage context aggressively.
 
-### Cursor
-- Use .cursor/rules for scoped reusable rules.
-- Rules should be focused, actionable, scoped, and split when large.
-- Add relevant files, not the whole repo.
-- Start a new chat after a logical task.
+- Keep CLAUDE.md short and durable.
+- Let Claude inspect project state instead of pre-writing its implementation plan.
+- Give it verification access and clear completion criteria.
 
-### Copilot
-- Use .github/copilot-instructions.md for repo-wide context.
-- Use .github/instructions/*.instructions.md for path-specific rules.
-- Keep instructions short and self-contained.
+### Cursor / Copilot / Windsurf / Aider
 
-### Windsurf
-- Include objective, relevant context, constraints, and @ mentions.
-- Do not rely on vague intent.
-
-### Aider
-- Put repeated style/project rules in CONVENTIONS.md.
-- Keep coding prompt scoped and file-aware.
+- Put persistent rules in the platform's scoped instruction files only when they are stable.
+- Keep task prompts focused on the current outcome and evidence.
+- Do not duplicate repository facts or generic process rules across every request.
