@@ -128,16 +128,16 @@ For technical accuracy, generate or validate labels and relationships outside th
 Use a compact scene description plus temporal behavior.
 
 ```text
-Create a video of [subject/action] in [setting]. Camera: [framing and movement]. Motion beats: [ordered actions]. Visual treatment: [style, light, mood]. Preserve [reference identity/details]. Avoid [specific failure only].
+Create a [duration] [aspect ratio] video of [subject/action] in [setting]. Camera: [framing and movement]. Motion beats: [ordered actions]. Visual treatment: [style, light, mood]. Preserve [reference identity/details]. Avoid [specific failure only].
 ```
 
 Example:
 
 ```text
-Create a video of a battered red guitar amplifier powering on in a dark rehearsal room. Start with a static close-up, then slowly push in as the pilot light flickers and dust moves in the warm beam. Realistic handheld texture, shallow depth of field, no text, no logos, no camera cuts.
+Create an 8-second 16:9 video of a battered red guitar amplifier powering on in a dark rehearsal room. Start with a static close-up, then slowly push in as the pilot light flickers and dust moves in the warm beam. Realistic handheld texture, shallow depth of field, no text, no logos, no camera cuts.
 ```
 
-Pass duration and aspect ratio as tool arguments when supported. Use timestamped beats only when timing matters. Do not micromanage every second for a simple motion.
+Use timestamped beats only when timing matters. Do not micromanage every second for a simple motion.
 
 ## Negative constraints
 

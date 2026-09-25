@@ -58,7 +58,7 @@ For automation:
 2. Run baseline, minimal, and candidate with stable model/runtime settings.
 3. Label outputs and record exact failures, token use, latency, and cost.
 4. Identify the failure pattern.
-5. Update the smallest relevant instruction group.
+5. Update the smallest relevant instruction group. Prefer changing outcome/boundary/done wording before adding process choreography.
 6. Re-test all variants.
 7. Remove one instruction group at a time and rerun.
 8. Keep only rules that improve real cases or enforce a non-negotiable boundary.
@@ -71,7 +71,7 @@ If output hallucinates -> add source rules + uncertainty policy.
 If output overdoes work -> narrow scope + done definition.
 If output ignores format -> add few-shot examples + strict schema.
 If output is too long -> add caveman style + max length.
-If coding agent breaks app -> add repo analysis + live verification + self review.
+If coding agent breaks app -> add missing repo evidence, scope/authority boundaries, and verification first. Add exact process steps only if the failure is truly procedural and repeats.
 
 ## Production prompt rules
 
@@ -80,7 +80,7 @@ If coding agent breaks app -> add repo analysis + live verification + self revie
 - Review optimized prompts manually before using.
 - Do not chase one example if it hurts broader cases.
 - Keep versioned prompts when business critical.
-- Track false constraints and unsupported specificity, not only task success.
+- Track false constraints, unsupported specificity, and unnecessary process prescription, not only task success.
 - Blind reviewers to variant names when subjective quality matters.
 - Use `scripts/make_prompt_eval.py` for a starter manifest, then replace placeholders with real cases.
 

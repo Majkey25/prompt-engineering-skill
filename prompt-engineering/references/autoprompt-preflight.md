@@ -1,92 +1,73 @@
 # Autoprompt Preflight
 
-Use when the user wants this skill to improve every task, not only explicit prompt-writing requests.
+Use when the user wants this skill to improve normal tasks silently before execution.
 
 ## Purpose
 
-Turn any user request into a stronger internal task brief before answering or using tools.
+Turn the request into the smallest useful internal work contract. Do not show it unless asked.
 
-Do not show the internal prompt unless the user asks.
-
-Before adding factual detail, classify context: C0 rough request, C1 partial supplied evidence, or C2 inspected source/environment. Never make the internal brief look complete by inventing facts.
+Classify context first: C0 rough request, C1 partial supplied evidence, C2 inspected source/environment. Never invent facts to make the brief look complete.
 
 ## Routing rule
 
-Do not let this skill become a parasite that blocks better tools.
+Do not let prompt engineering block a better task-specific skill or tool. Sharpen the request, then route to the correct capability.
 
-If a specific skill/tool fits, use this skill to sharpen the request, then invoke the specific skill/tool.
-
-Examples:
-
-- User asks for a spreadsheet -> internal prompt -> spreadsheet skill/tool.
-- User asks for a PDF -> internal prompt -> PDF skill/tool.
-- User asks for a system/developer prompt -> minimum-effective system-prompt workflow + eval plan.
-- User asks for coding repo work -> classify C0/C1/C2 -> coding-agent contract / repo tools.
-- User asks for image edit -> internal prompt -> image tool.
-- User asks for factual current info -> internal prompt -> web/search.
-
-## Micro internal prompt
-
-Use for simple tasks:
+## Micro brief
 
 ```text
-Task -> [user goal].
-Need -> direct answer.
-Constraints -> [user constraints].
-Check -> obvious errors + missing assumptions.
-Output -> concise, useful, no filler.
+Outcome -> [user goal]
+Boundaries -> [real user constraints]
+Output -> [what they need]
 ```
 
-## Medium internal prompt
-
-Use when task has multiple steps:
+## Medium brief
 
 ```text
-Role -> senior operator.
-Task -> [specific outcome]
-Context -> [known facts]
-Unknowns -> [what must be inferred or verified]
-Constraints -> [must / must not]
-Process -> plan briefly -> execute -> verify basics
-Output -> [format user needs]
-Risk -> state uncertainty, cite if researched
+Outcome -> [specific result]
+Context -> [known facts + relevant unknowns]
+Boundaries -> [must / must not / non-goals]
+Done -> [observable success]
+Output -> [format]
 ```
 
-## Large/risky internal prompt
-
-Use for coding, legal/finance/health, long docs, current facts, artifacts, or multi-tool work:
+## Large/risky or agentic brief
 
 ```text
-Role -> strict task owner.
-Goal -> [specific outcome]
-Context -> [source material + constraints]
-Success -> [done when]
-Risk -> [what can go wrong]
-Process -> inspect -> plan -> execute -> verify -> self-review
-Tools -> [needed tools]
-Output -> concise final + evidence/citations/artifact links
-Stop -> no fake certainty; disclose blockers
+Outcome -> [specific result]
+Evidence -> [sources / repo / files / user facts]
+Hypotheses -> [unverified theories]
+Boundaries -> [scope + authorization]
+Done -> [acceptance criteria]
+Verification -> [evidence standard]
+Output -> [format]
 ```
 
-## Autoprompt checklist
+Do not add a generic `inspect -> plan -> execute -> verify` chain by reflex. Let the target skill/agent choose the process unless exact order matters.
 
-Before answering:
+## Internal agent autonomy rule
 
-- What is the actual deliverable?
+When the user asked for action, not advice:
+
+```text
+Own the task through completion. Do not stop at a plan if you can safely continue. Choose the method and tools inside scope. Ask only before actions that cross a real safety, authorization, or reversibility boundary.
+```
+
+## Checklist
+
+- What result does the user actually need?
 - What does done mean?
-- What can be verified?
-- What context is missing?
-- Which tool/skill is more specific?
-- What should not be changed/assumed?
-- Is current web/internal search required?
-- Should response be concise or detailed?
+- Which facts are supplied, verified, hypothesized, or unknown?
+- What must not change?
+- Is there an action/approval boundary?
+- Can the target agent choose the method better than the prompt writer?
+- Is verification required, and what evidence would count?
+- Is a specific tool/skill more appropriate?
 
 ## What not to do
 
-- Do not reveal private hidden reasoning.
-- Do not spend more tokens planning than solving.
-- Do not ask avoidable clarifying questions.
-- Do not ignore specific tools because this skill triggered.
-- Do not turn every tiny task into a giant prompt.
-- Do not add files, functions, frameworks, commands, sources, dates, people, or other specifics that were not supplied or verified.
+- Do not reveal hidden reasoning.
+- Do not over-plan tiny tasks.
+- Do not ask avoidable clarification.
+- Do not invent files, functions, frameworks, commands, sources, dates, people, or other specifics.
+- Do not force subagents, exact tools, or a step list without a real reason.
 - Do not make a custom system prompt larger than the behavior gap it must fix.

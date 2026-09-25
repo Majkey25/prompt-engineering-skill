@@ -1,118 +1,139 @@
 # Research Backed Principles
 
-This file summarizes durable prompting rules from major official docs and practitioner sources. Use it as decision support, not as a citation database.
+Last synthesized: 2026-09-22.
 
-For selected current source URLs, review dates, and model-specific caveats, load `research-source-map.md`. Recheck time-sensitive model guidance before turning it into a durable rule.
+Use this file as cross-vendor decision support. Recheck `research-source-map.md` before turning model-specific guidance into a durable rule.
 
-## OpenAI prompt guidance
+## Cross-vendor synthesis
 
-- Put instructions clearly near the start for normal API prompts.
-- Separate instruction and context with delimiters.
-- Be specific about outcome, length, format, style, and audience.
-- Show the desired output format with examples.
-- Start zero-shot, add few-shot examples when needed, consider fine-tuning only when prompting is not enough.
-- For newer capable models, start lean and state each instruction once. Do not prescribe every intermediate step when the model can infer intent and use tools.
-- Compare important prompts against a platform-default or no-custom-prompt baseline. OpenAI reports workload-specific internal coding-agent gains from removing repeated instructions, unnecessary examples, and bloated tool descriptions; treat those numbers as directional, not universal.
-- Keep hard requirements, relevant context, approval boundaries, and success criteria even when shortening.
+The strongest durable prompting pattern across current OpenAI, Anthropic, and Google guidance is:
 
-## OpenAI image prompting guidance
+1. State the desired outcome clearly.
+2. Provide relevant context/evidence and separate it from instructions.
+3. Define real constraints, scope, and authority boundaries.
+4. Define success/done criteria.
+5. Let a capable model choose the reasoning/implementation path unless the path itself matters.
+6. Ask for verification or grounding when the outcome needs it.
+7. Add examples, process steps, or extra rules only when they solve an observed ambiguity or failure.
+8. Evaluate prompts empirically and remove prompt debt.
 
-- A useful image prompt can often be 1 to 3 clear sentences.
-- State purpose, subject, action, setting, and the visual treatment that materially matters.
-- Add framing, lighting, exact text, or preservation rules only when they control the result.
-- For edits, state what changes and what must remain unchanged.
-- Iterate from observed mismatch instead of adding random adjectives or giant negative lists.
+This is more robust than one universal mega-template.
 
-## OpenAI Codex guidance
+## OpenAI guidance
 
-- Codex can inspect repo, edit files, run commands, and provide evidence from terminal/test output.
-- Large changes benefit from planning before implementation.
-- AGENTS.md is the durable repo instruction layer.
-- The agent loop is model + tools + observations + user feedback, not just one prompt.
+Durable takeaways from current model and prompting docs:
 
-## OpenAI Skills guidance
+- State expected outcome and success criteria.
+- For capable reasoning/agentic models, reduce or remove hand-written step-by-step process guidance unless the exact path is required.
+- Legacy prompt stacks can narrow the model's search space and produce mechanical behavior. Start from a fresh/minimal baseline when practical.
+- For action requests, prompts can explicitly require follow-through so the agent does not stop at acknowledgment or a plan.
+- Keep prompts simple and direct; do not request hidden chain-of-thought from reasoning models.
+- Use delimiters/sections to separate instructions, examples, and context.
+- Prefer deterministic structured output/schema controls over duplicating the full schema in prose when the runtime supports them.
+- Preserve real constraints, side-effect boundaries, evidence rules, and output requirements even when shortening.
 
-- Skill description controls discovery.
-- Full SKILL.md loads only after trigger.
-- References/resources should be read only when needed.
-- Keep SKILL.md as control plane; move deep detail to references.
+## Anthropic guidance
 
-## Anthropic prompt guidance
+Durable takeaways from current Claude prompting guidance:
 
-- Define success criteria before prompt engineering.
-- Build empirical tests/evals where possible.
-- Use clear/direct instructions.
-- Use examples for consistency.
-- Use XML tags/delimiters to separate content.
-- Chain complex prompts instead of one giant prompt.
-- For long context, put long docs high and query/instructions late; ask for quotes first.
-- A role can be one sentence. Decorative expertise language is not a substitute for clear scope.
-- Newer models can overtrigger on repeated CRITICAL, MUST, NEVER, and aggressive tool-use language. Use priority words only where they encode real hierarchy or risk.
-- Not every failure is best solved with more prompt text. Consider model choice, tool design, schemas, permissions, hooks, retrieval, or application logic.
+- Be clear and direct about desired output and constraints.
+- Prefer general instructions over a hand-written reasoning path when the model can reason better than the prompt author.
+- Use ordered steps when order/completeness of the steps is itself important.
+- Give long-running agents verification tools and clear success criteria.
+- Separate autonomy from safety: local/reversible work can proceed; destructive, shared, externally visible, or hard-to-reverse actions may require confirmation.
+- Modern Claude models can orchestrate subagents natively. Do not force delegation by default; constrain it only when overuse/underuse is observed or independent workstreams require it.
+- Add scope controls when the agent overengineers, creates extra files, or adds flexibility not requested.
+- In coding, tell the agent to inspect relevant code before making claims instead of speculating.
 
-## Claude Code guidance
+## Google guidance
 
-- Give the agent a way to verify work: tests, screenshots, expected outputs.
-- Explore first, plan, then code.
-- Use CLAUDE.md for project memory, but keep it useful and short.
-- Manage context aggressively because performance degrades as context fills.
-- Let the coding agent fetch repository facts it can inspect more reliably than the upstream prompt writer.
-- Keep CLAUDE.md limited to durable facts and commands that the model cannot reliably infer from the project. Bloated persistent instructions can hide the current task.
-- Use hooks, permissions, schemas, and other deterministic controls for requirements that must not be advisory.
-- Course-correct early.
+Durable takeaways from current Gemini prompting docs:
 
-## Google Vertex guidance
+- Be precise, direct, and concise.
+- Use consistent structure and delimiters to separate prompt parts.
+- Define ambiguous parameters explicitly.
+- For long contexts, keep the large context clearly separated and place the specific task/query after it.
+- Examples can strongly steer output format and behavior, but too many examples can cause overfitting.
+- Google currently recommends few-shot examples aggressively for Gemini, while OpenAI reasoning guidance often recommends trying zero-shot first. Therefore "always use examples" is **not** a cross-model rule. Test examples against the target runtime.
 
-- Prompt design is iterative.
-- Prompts can include instructions, context, examples, and partial input.
-- Rigorous testing/evaluation matters.
-- Try order changes when quality is inconsistent.
+## Practitioner evidence: Fable 5.1 workflow video
 
-## Microsoft/Azure style guidance
+Source provided by the user: `https://youtu.be/-XWSJM-Ue-o`.
 
-- Use clear task framing.
-- Use separators, markdown, XML-like tags, schemas, and examples when structure matters.
-- Specify output format and constraints.
+Prompt-text recommendations from the video that align with current official guidance:
 
-## DAIR / Learn Prompting / pattern catalog guidance
+- Prompt the outcome more broadly instead of micromanaging implementation.
+- Give the agent enough context, but do not turn context into a forced solution.
+- Define what completion means so the agent does not stop at a plan or explanation.
+- Give the agent room to choose among approaches and to reject the user's initial implementation idea when evidence points elsewhere.
+- Keep scope tight and block unrelated improvements.
+- Avoid carrying old prompt baggage forward by default.
 
-- Patterns are tools, not magic.
-- Use zero-shot for simple tasks.
-- Use few-shot for format/style consistency.
-- Use ReAct/tool loops for agentic tasks.
-- Use RAG/source grounding for factual tasks.
-- Use rubrics/evals for quality-sensitive tasks.
+Do **not** generalize model-selection, effort-level, or product-configuration advice from the video into prompt-text rules.
 
-## Cursor guidance
+## Evidence versus choreography
 
-- Plan first for larger work.
-- Use relevant files/context, not everything.
-- Rules are persistent context and should be focused, actionable, scoped, and split when large.
-- Use project rules when repeating prompts.
+For agentic work, prefer:
 
-## GitHub Copilot guidance
+```text
+Outcome + evidence/context + boundaries + done + verification
+```
 
-- Custom instructions add reusable repo/team context.
-- Repository-wide, path-specific, and agent instructions have precedence rules.
-- Keep instructions short and self-contained.
-- Avoid conflicts between instruction layers.
+over:
 
-## HumanLayer 12-factor guidance
+```text
+first do X -> then call Y -> then edit Z -> then spawn N agents -> then run Q
+```
 
-- Own your prompts.
-- Own your context window.
-- Treat tools as structured outputs.
-- Compact errors into context.
-- Prefer small focused agents over giant agents.
-- Trigger agents from anywhere, but keep control flow explicit.
+unless the sequence itself is required.
 
-## Karpathy/vibe coding guidance
+## Hypotheses
 
-- Natural language is now a programming interface.
-- Vibe coding is useful for flow/prototypes.
-- Production needs human ownership, architecture taste, security review, diff review, tests/checks, and verification.
-- AI code may be bloaty, repetitive, or poorly abstracted. Prompt must force review.
+A user-supplied suspected cause is valuable context, but it is not automatically a requirement.
 
-## Interpretation rule
+Prompt pattern:
 
-The sources do not establish one universally best prompt structure. Use them to choose the minimum effective prompt for the target model, runtime, evidence level, and task. Preserve model capability unless a true requirement or measured failure justifies narrowing it.
+```text
+I suspect [X]. Treat that as a hypothesis. Verify the actual root cause before choosing the implementation, and use a different approach if evidence supports it better.
+```
+
+## Completion behavior
+
+For action prompts, state the stopping rule:
+
+```text
+Do not stop at a plan when execution was requested. Continue until the requested outcome is verified or a concrete blocker prevents safe completion.
+```
+
+Do not use this wording for requests that are explicitly analysis-only, planning-only, or advisory.
+
+## Scope and authority
+
+A useful agentic prompt separates two questions:
+
+- What may the agent decide itself?
+- What actions require user approval?
+
+Default pattern:
+
+```text
+Choose the method, tools, files, and delegation needed inside the requested scope. Ask before destructive, irreversible, externally visible, costly, or materially out-of-scope actions.
+```
+
+Shorten this when the runtime already enforces permissions.
+
+## Examples and structure
+
+- Use Markdown/XML/delimiters when they improve parsing or separate untrusted data from instructions.
+- Use examples when format, style, label boundaries, or edge cases are otherwise ambiguous.
+- Do not add examples or sections simply because a template contains them.
+
+## Evaluation rule
+
+Prompt quality is empirical. For important prompts compare:
+
+1. baseline/platform default,
+2. minimum-effective prompt,
+3. candidate prompt.
+
+Measure task success, false constraints, unsupported specificity, unnecessary process prescription, token cost, and target-domain quality. Remove rules that do not earn their weight.

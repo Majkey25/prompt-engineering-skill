@@ -1,129 +1,114 @@
 # Prompt Quality Checklist
 
-Run before returning any generated prompt or using autoprompt output.
+Run before returning an important generated prompt or using an autoprompt brief.
 
-## Must pass
+## Core must pass
 
-- Goal is specific.
-- Done state is testable.
-- Context is relevant, not bloated.
-- Source/user data is separated from instructions.
-- Constraints are concrete and enforceable.
-- Output format is explicit.
-- Examples are used only when they improve consistency.
-- Verification/evaluation exists when outcome matters.
-- Failure and uncertainty behavior is defined for factual, risky, or incomplete tasks.
-- Unsafe/destructive actions are controlled.
+- Desired outcome is specific.
+- Done state is observable/testable when the task has a meaningful completion condition.
+- Context is relevant and separated from instructions.
+- User suspicions or implementation preferences are labeled as hypotheses unless explicitly mandatory.
+- Constraints and non-goals are concrete.
+- Agent authority/approval boundary is clear when actions are possible.
+- Output format is specified only as tightly as needed.
+- Verification/evidence expectations exist when the outcome matters.
+- Failure/uncertainty behavior exists for factual, risky, or incomplete tasks.
 - Unsupported assumptions are not presented as facts.
-- Missing project/source facts are marked as unknown and assigned to repo/source inspection, not invented.
-- Token-efficient style is used only when useful, not blindly.
-- Prompt type and instruction layer are classified before writing.
-- Evidence level is classified as C0, C1, or C2.
-- Specificity does not exceed supplied or verified evidence.
+- Prompt specificity does not exceed supplied or verified evidence.
 - The prompt is no larger or more prescriptive than the task and eval evidence justify.
 
-## System/developer-prompt must pass
+## Process-prescription check
 
-- Starts from a platform-default or no-custom-prompt baseline.
-- Contains durable cross-task behavior, not current task data or guessed project facts.
-- Separates advisory prompt rules from deterministic controls such as permissions, schemas, hooks, validators, and sandboxing.
-- States each instruction once and resolves hierarchy conflicts.
-- Does not impose a global UI aesthetic without product, brand, repository, reference, accessibility, or eval evidence.
-- Has baseline, minimal, and candidate variants for important use cases.
-- Has representative normal, ambiguous, edge, adversarial, initiative, and approval cases.
-- Has an ablation path for removing instruction groups.
-- Accepts a shorter or blank custom prompt when it performs better.
+Every explicit step, tool, file, subagent role, or command must answer: **why must this be prescribed?**
+
+Keep it only if:
+
+- order/procedure is part of the requirement,
+- it is required for reproducibility/compliance/safety,
+- it comes from verified project/runtime evidence,
+- the user explicitly requested it,
+- or evals show the general outcome prompt repeatedly fails without it.
+
+Otherwise remove it and let the target choose the path.
+
+## Agentic prompt must pass
+
+- Action requests do not accidentally stop at a plan.
+- Scope blocks unrelated features, cleanup, refactors, and redesigns.
+- The agent may choose method/files/tools/delegation inside scope unless restricted for a reason.
+- Destructive, irreversible, externally visible, costly, or materially out-of-scope actions have an approval boundary when the runtime does not already enforce one.
+- Clarification is requested only when ambiguity could materially change correctness, safety, authorization, or the requested outcome.
+- Verification asks for evidence, not fake certainty.
 
 ## Coding-agent must pass
 
-- Karpathy-style production stance included unless prototype.
-- C0 prompts are outcome-focused and discovery-first; they do not invent files, functions, frameworks, packages, commands, tests, env vars, architecture, routes, or UI implementation.
-- C1 prompts use exact supplied facts and label implementation theories as hypotheses.
-- C2 prompts use project specifics only when directly verified.
-- Stack/tooling must be discovered from repo evidence.
-- If code context is missing, prompt tells the agent what to inspect instead of guessing implementation details.
-- Subagents are considered for large/risky/parallelizable work and omitted for tiny scoped changes.
-- Plan before code required for risky work.
-- Small scoped changes required.
-- Diff review required.
-- Live verification default.
-- UI tasks include Playwright/browser checks when available.
-- Pytest is not default.
-- Agent must not delegate testable checks to user.
-- Done definition is explicit.
-- Final response request is concise plain text unless a rigid structure is actually needed.
+- C0 prompts are discovery-first and do not invent repo details.
+- C1 prompts preserve supplied facts and mark implementation theories as hypotheses.
+- C2 prompts use only verified project specifics that help.
+- Root-cause discovery is not replaced by a user guess.
+- The prompt does not force exact files, commands, tests, or subagents without evidence/need.
+- Small scoped work does not require ceremonial planning.
+- Large/risky work may require a brief plan, sequencing, rollback, or independent review.
+- Verification depth matches risk and uses existing project paths when possible.
+- Tests are not weakened or invented to manufacture success.
+- Diff/self-review is concise and bounded.
+- Done definition prevents unrelated cleanup after the requested outcome is proven.
 
-## Image/video-prompt must pass
+## System/developer prompt must pass
 
-- Prompt describes a coherent visual result rather than a disconnected keyword list.
-- Supplied references have explicit roles.
-- Image edits distinguish change from preservation.
-- Exact visible text is separated and quoted when required.
-- Negative constraints target likely failures instead of becoming a giant list.
-- Tool parameters are kept outside visual prose when structured arguments exist.
-- Detail is added only when it changes composition, fidelity, identity, timing, layout, or another required outcome.
+- Starts from platform-default/no-custom baseline for important use cases.
+- Contains durable cross-task behavior, not current task data or guessed project facts.
+- Separates advisory prompt rules from deterministic controls.
+- Does not encode a fixed tool sequence or planning ritual without a durable reason.
+- States each instruction once and resolves conflicts.
+- Has representative eval cases and an ablation path when important.
+- Accepts a shorter/blank custom prompt when it performs better.
 
-## Autoprompt must pass
+## Examples check
 
-- Did not expose private reasoning or internal-only instructions; returned the finished user-facing prompt when requested.
-- Used more specific skill/tool when available.
-- Did not over-plan tiny task.
-- Did not ask avoidable clarification.
-- Did cite/search when current/high-stakes facts matter.
+Use examples only if they improve:
+
+- format consistency,
+- style/tone consistency,
+- classification/extraction boundaries,
+- or recurring edge cases.
+
+Do not add examples because a provider/template says they are always good. Test them on the target runtime.
 
 ## Prompt debt check
 
 Delete or rewrite a rule if:
 
-- It is generic behavior steering with no measurable purpose.
-- It was added for an old model and no longer helps.
-- It conflicts with another rule.
-- It repeats system/tool behavior.
-- It makes every task longer without improving outputs.
-- Nobody can explain how to test it.
-- Baseline or minimal behavior is equal or better without it.
-- It fills an unknown with a plausible but unverified implementation detail.
-- It encodes personal UI taste as global policy.
-- It solves one edge case but harms normal cases.
+- it is generic behavior steering with no measurable purpose,
+- it was added for an old model/problem and no longer helps,
+- it conflicts with another rule,
+- it repeats tool/schema/runtime behavior,
+- it narrows the solution path without a requirement,
+- it forces planning/delegation for trivial work,
+- nobody can explain how to test it,
+- baseline/minimal behavior is equal or better without it,
+- or it turns an unknown/hypothesis into a fake fact.
 
 ## Vague phrase conversion
 
 Bad -> Better
 
-- improve project -> identify scoped issue, fix it, verify exact workflow
-- make better -> define target audience + success criteria
-- use best practices -> follow repo/source-specific rules
-- clean code -> clear names, no duplication in scope, explicit errors, no behavior drift
-- optimize -> state metric: speed/cost/tokens/readability/reliability
-- production ready -> run relevant checks, verify live path, handle errors, report blockers
-- fix everything -> fix only in-scope blockers; report unrelated issues
+- improve project -> define the user-visible or measurable result
+- make better -> define audience + success criteria
+- use best practices -> follow verified project/source constraints
+- clean code -> define concrete maintainability issue in scope
+- optimize -> state metric + baseline/target if known
+- production ready -> define behavior, risk boundary, and verification
+- fix everything -> define the requested outcome + directly related blockers
 
 ## Final self-check
 
-Ask:
-
-1. Could another agent execute this without guessing?
-2. Does done mean something testable?
-3. Is context sufficient but not bloated?
-4. Are source and uncertainty rules present when needed?
-5. Are we hiding risk?
-6. Is this prompt a contract or a wish?
-7. Would the target model perform better with less instruction?
-8. Which exact rule would I remove first in an ablation?
-9. Did I add any detail only because a template had a slot?
-
-## Complete merged skill checks
-
-Before returning any final prompt from this expanded skill, verify:
-
-- Original coding-agent structure still exists.
-- `/goal` creates an agentic coding prompt.
-- Live verification is default.
-- Pytest is optional, not default.
-- UI prompts include Playwright or Playwright Interactive when available.
-- Migration prompts include inventory, mapping, behavior preservation, UI preservation, route/data-flow preservation, incremental checks, and final report.
-- Autoprompt mode can silently convert normal user requests into better internal task briefs.
-- Token-efficient style does not delete constraints.
-- Karpathy-style agentic engineering is used for production coding work.
-- RAG/wiki/VDB/cache prompts include raw data, retrieval, metadata, stale cache, citation, and benchmark checks.
-- Important prompts include eval or benchmark cases.
+1. Could another competent agent understand the job without guessing the outcome?
+2. Does done mean something observable?
+3. Did I turn context into an instruction accidentally?
+4. Did I prescribe a process that is not actually required?
+5. Is the agent free to make useful decisions inside scope?
+6. Are real approval boundaries explicit?
+7. Is unrelated scope expansion blocked?
+8. Would the target likely do better with less instruction?
+9. Which exact rule would I remove first in an ablation?

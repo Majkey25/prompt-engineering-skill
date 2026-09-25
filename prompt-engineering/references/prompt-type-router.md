@@ -14,7 +14,7 @@ Classify the target before writing. Do not apply one universal mega-template to 
 | Research prompt | `general-task-prompts.md` | `source-driven-prompt-audit.md`, `research-backed-principles.md` |
 | Extraction or classification | `general-task-prompts.md` | `prompt-pattern-library.md`, `evals-and-iteration.md` |
 | Image or video prompt | `image-video-prompts.md` | `domain-prompt-patterns.md` |
-| Prompt audit or optimization | Domain-specific primary reference above + `prompt-quality-checklist.md` | `evals-and-iteration.md`; add `system-prompt-evals.md` only for system/developer prompts |
+| Prompt audit or optimization | `prompt-quality-checklist.md` | `system-prompt-evals.md`, `evals-and-iteration.md` |
 | Autoprompt preflight | `autoprompt-preflight.md` | the domain-specific reference selected above |
 
 ## Mandatory decisions

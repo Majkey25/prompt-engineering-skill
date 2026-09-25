@@ -1,111 +1,83 @@
 # Research Source Map
 
-Last reviewed: 2026-08-03.
+Last reviewed: 2026-09-22.
 
-Use this selected source map for newer model-specific and research-backed rules. It is not a complete citation database. Recheck current model guidance before making strong claims because prompting behavior changes across model generations.
-
-## Contents
-
-- [Source priority](#source-priority)
-- [OpenAI](#openai)
-- [Anthropic](#anthropic)
-- [Google](#google)
-- [Courses and practitioner education](#courses-and-practitioner-education)
-- [Primary research](#primary-research)
-- [Skill interpretation](#interpretation-used-by-this-skill)
+Use this file to trace the skill's prompting rules. Recheck current model-specific guidance before making strong provider-specific claims.
 
 ## Source priority
 
-1. Current official model and product documentation
-2. Current official examples, cookbooks, courses, and eval guidance
-3. Primary research papers
+1. Current official model/product documentation
+2. Current official examples, cookbooks, and eval guidance
+3. Primary research
 4. High-quality practitioner reports with reproducible examples
 5. Community pattern catalogs for ideas, not authority
 
-Do not copy one vendor's model-specific rule into every model or runtime.
+Do not copy one provider's model-specific rule into every runtime.
 
 ## OpenAI
 
-### GPT-5.6 model guidance
+### Current model guidance
 
 Source: https://developers.openai.com/api/docs/guides/latest-model
 
-Durable takeaways:
+Relevant current guidance:
 
-- Favor leaner prompts.
-- State each instruction once.
-- Remove repeated instructions and unnecessary examples.
-- Keep examples and style rules only when they encode requirements or fix measured gaps.
-- Newer models can infer intent better, so prompts often do not need to prescribe every step.
-- Continue to provide hard constraints, approval boundaries, relevant context, success criteria, and required evidence.
-- Validate prompt changes on representative tasks.
+- State expected outcome and success criteria.
+- Reduce/remove detailed step-by-step process guidance when the exact path does not matter.
+- Describe allowed side effects, evidence rules, and output shape when they are part of the contract.
+- Avoid carrying every instruction from older prompt stacks into newer capable models.
+- For action requests, explicit follow-through instructions can prevent the agent from stopping at acknowledgment or a plan.
+- Audit skills/instruction files because conflicting persistent guidance can block work.
 
-The guide reports directional internal coding-agent results where leaner system prompts improved eval scores while reducing tokens and cost. Treat the numbers as workload-specific, not a universal guarantee.
+Cross-model interpretation used by this skill: outcome-first prompts generalize well; the exact wording and amount of autonomy must still be evaluated on the target runtime.
 
-### OpenAI image prompting guidance
+### Reasoning best practices
 
-Source: https://openai.com/academy/image-generation/
+Source: https://developers.openai.com/api/docs/guides/reasoning-best-practices
 
-Durable takeaways:
+Relevant guidance:
 
-- A good image prompt often needs only 1 to 3 clear sentences.
-- Describe purpose, subject, action, setting, and desired visual treatment.
-- Add framing, lighting, or constraints only when they matter.
-- Use direct preservation constraints for edits.
-- Iterate from observed mismatch rather than adding random adjectives.
+- Keep prompts simple and direct.
+- Avoid asking reasoning models to expose or mechanically follow a hand-written chain-of-thought.
+- Use clear delimiters.
+- Try zero-shot first for reasoning models, then add examples when needed.
+
+### Prompt engineering
+
+Source: https://developers.openai.com/api/docs/guides/prompt-engineering
+
+Relevant guidance:
+
+- Separate instructions and input/context clearly.
+- Use examples and output-format instructions when they materially improve consistency.
+- Treat prompt structure as task-dependent, not a fixed ritual.
 
 ## Anthropic
-
-### Prompt engineering overview
-
-Source: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview
-
-Durable takeaways:
-
-- Define success criteria and empirical tests before prompt optimization.
-- Not every failure should be fixed with prompting; model, tooling, or architecture changes may be better.
-- Prompting techniques are starting points that must be tested.
 
 ### Prompting best practices
 
 Source: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
 
-Durable takeaways:
+Relevant guidance:
 
 - Be clear and direct.
-- Add relevant context and examples where they help.
-- Separate complex prompt sections with consistent structure.
-- A role can be a single sentence.
-- Tell the model what to do rather than building long negative lists.
-- Newer models can overreact to aggressive tool-triggering language, so old CRITICAL/MUST wording may need to be reduced.
-- Model-specific behavior, including frontend defaults, changes over time.
+- Prefer general instructions over prescriptive steps when the model can reason through the task.
+- Use numbered/bulleted steps when order or completeness really matters.
+- Give autonomous agents clear verification paths.
+- Balance autonomy with confirmation for destructive/hard-to-reverse/shared actions.
+- Let modern Claude models orchestrate subagents naturally; constrain delegation only when it is excessive or inappropriate.
+- Add explicit minimal-scope guidance when the model overengineers.
+- Require code inspection before codebase claims to reduce hallucination.
 
-### Claude Code best practices
+### Prompt engineering overview
 
-Source: https://code.claude.com/docs/en/best-practices
+Source: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview
 
-Durable takeaways:
+Relevant guidance:
 
-- Give the agent an executable verification signal.
-- Explore first, then plan, then code when complexity earns planning.
-- Let the agent fetch project context rather than asking the prompt writer to guess it.
-- Keep CLAUDE.md concise and include only facts the model cannot reliably infer from the code.
-- Bloated persistent instructions can hide the current task and degrade behavior.
-- Use hooks or permissions for deterministic controls.
-
-### Anthropic interactive prompt engineering tutorial and courses
-
-Sources:
-
-- https://github.com/anthropics/prompt-eng-interactive-tutorial
-- https://github.com/anthropics/courses
-
-Durable takeaways:
-
-- Practice on examples and failure cases.
-- Separate data from instructions.
-- Build complex prompts incrementally.
-- Treat evaluation as a core skill, not an optional final step.
+- Define success criteria before optimization.
+- Use empirical tests/evals.
+- Not every failure is best solved by adding prompt text.
 
 ## Google
 
@@ -113,40 +85,32 @@ Durable takeaways:
 
 Source: https://ai.google.dev/gemini-api/docs/prompting-strategies
 
-Durable takeaways:
+Relevant guidance:
 
-- Prompt design is iterative.
-- Use clear goals, relevant context, constraints, examples, and output format as needed.
-- Break complex workflows into components rather than forcing one giant prompt.
-- Use model-specific guidance and parameters.
-- Prompt order and long-context structure can affect results.
+- Be precise, direct, and concise.
+- Use consistent Markdown/XML structure.
+- Define ambiguous parameters.
+- Separate long context from the final query and anchor the question to the preceding context.
+- Few-shot examples can strongly steer format/behavior; too many can overfit.
 
-### Gemini image generation prompting
+Google currently recommends few-shot examples more aggressively than OpenAI's reasoning-model guidance. This skill treats that as provider-specific evidence, not a universal rule. Use evals.
 
-Source: https://ai.google.dev/gemini-api/docs/image-generation
+## Practitioner source
 
-Durable takeaways:
+### Fable 5.1 prompting workflow video
 
-- Describe a coherent scene rather than a disconnected keyword list.
-- Use explicit preservation language for edits.
-- Label the role of multiple references.
-- Keep tool configuration separate from visual intent where possible.
+Source: https://youtu.be/-XWSJM-Ue-o
 
-## Courses and practitioner education
+Use only the prompt-text ideas that survive cross-checking against stronger evidence:
 
-### DeepLearning.AI and OpenAI course
+- outcome-first rather than implementation choreography,
+- clear completion criteria,
+- implementation ideas as hypotheses,
+- decision authority inside scope,
+- scope discipline,
+- deletion of stale prompt baggage.
 
-Source: https://learn.deeplearning.ai/courses/chatgpt-prompt-eng/information
-
-Durable takeaways:
-
-- Write clear and specific instructions.
-- Develop prompts iteratively through examples and observed failures.
-- Use prompts as part of an application workflow, not as isolated prose.
-
-### DAIR.AI and Learn Prompting
-
-Use these as broad technique catalogs and teaching resources. Verify model-specific recommendations against current vendor docs and evals before turning them into rules.
+Do not encode the video's model-selection/effort/product-setting advice into general prompt rules.
 
 ## Primary research
 
@@ -154,29 +118,24 @@ Use these as broad technique catalogs and teaching resources. Verify model-speci
 
 Source: https://arxiv.org/abs/2406.06608
 
-Durable takeaways:
-
-- Prompt engineering contains many distinct techniques across text and other modalities.
-- Terminology and evidence are fragmented.
-- Technique selection should follow task and evaluation, not ritual.
+Interpretation: prompting contains many distinct techniques and no single universal template. Choose techniques by task and evaluate them.
 
 ### Automatic prompt optimization survey
 
 Source: https://arxiv.org/abs/2502.16923
 
-Durable takeaways:
+Interpretation: prompt optimization is an empirical search problem requiring objectives, cases, metrics, and review.
 
-- Prompt optimization is an empirical search problem.
-- Automated optimization still requires a clear objective, cases, and metrics; add human review when stakes or evaluation design require it.
+## Skill interpretation
 
-## Interpretation used by this skill
+The combined evidence supports:
 
-The sources do not support one universally ideal prompt template. They support:
-
-- minimum effective prompting
-- task and model-specific routing
-- evidence-calibrated specificity
-- clear separation of instruction layers
-- empirical evals and ablation
-- deterministic enforcement outside prompts when available
-- direct visual prompting without unnecessary keyword or style bloat
+- minimum-effective prompting,
+- outcome-first task contracts,
+- evidence-calibrated specificity,
+- context/instruction separation,
+- agent decision authority inside explicit boundaries,
+- done criteria and verification,
+- process prescription only when necessary,
+- examples as an evaluated tool rather than ritual,
+- prompt ablation and deletion of stale rules.

@@ -1,30 +1,34 @@
-# Ponytail + Caveman Contract
+# Ponytail + Caveman + Unslop Contract
 
-Use this reference when generated prompts should force both small-scope engineering and terse output.
+Use this reference when the user explicitly wants these literal directives, when the target runtime understands them, or when evals show they improve results.
 
-## Required block
+By default, apply the behaviors while **authoring** the prompt instead of pasting a large control block into every prompt.
+
+## Authoring semantics
+
+- Ponytail -> smallest semantically complete safe solution, existing/native dependencies first, no speculative abstractions, no unrelated scope.
+- Caveman -> concise wording, low filler, exact technical language.
+- Unslop -> natural direct prose without canned AI phrasing.
+
+These are style/scope lenses, not a substitute for the actual task contract.
+
+## Optional literal block
+
+Use only when justified:
 
 ```text
-@ponytail / Use Ponytail full: simplest safe solution that works. Make the smallest semantically complete change that fixes the root cause, preserves required behavior, avoids unrelated change, and is supported by verification proportionate to risk. Optimize semantic scope, not line count or textual diff size. Stdlib/native/existing deps first. No speculative abstractions. Delete before adding. No new dependency unless it clearly earns weight. Do not trade away correctness, clarity, validation, explicit errors, typing, or necessary tests to make the patch smaller. For current APIs, packages, functions, security, or version-specific behavior: inspect repo first, then verify official/current docs before coding. Stop researching once path is clear.
-@caveman / Talk caveman: concise English. Short lines. No filler. Use symbols when useful: ->, =>, +, /, []. Keep exact technical names. Save tokens. Do not remove required reasoning, validation, evidence, or safety checks.
+@ponytail / Use the simplest safe solution that fully fixes the requested problem. Prefer existing/native dependencies and project patterns. Avoid speculative abstractions, unrelated cleanup, and unnecessary dependencies. Expand scope only when required for correctness.
+@caveman / Keep agent communication concise and technical. No filler. Preserve required constraints, evidence, validation, and safety details.
+@unslop / Keep human-readable prose plain, specific, and natural. Remove canned AI phrasing and fake emphasis without weakening technical precision.
 ```
 
-## Use
-
-Include for coding-agent, repo, automation, workflow implementation, technical research, prompt-audit, and production-quality prompts.
-
-For CR/code review, use `review-rubric.md` and keep the task review-only unless edits are explicitly requested.
-
-Skip or isolate outside the output schema for exact JSON, customer-facing copy, legal/medical prose, image/video prompt text, and creative writing.
+Do not put the literal block into exact JSON prompts, image/video prompts, legal/medical/customer-facing copy, or any prompt where it competes with the actual output contract.
 
 ## Self-check
 
-- Ponytail present when task can create implementation bloat.
-- Caveman present when terse agent communication helps.
-- No requirement lost to compression.
-- No new dependency without clear evidence.
-- Current APIs/functions verified when stale risk exists.
-- Smallest semantically complete change, not smallest line count or textual diff.
-- Scope expands only for a stated correctness or architecture reason.
-- Verification depth matches risk; focused regression coverage is added when behavior changes and the repo has a suitable test layer.
-- Editing stops once the requested outcome is proven and the diff is clean.
+- Did these directives earn their tokens?
+- Could the same behavior be expressed more directly in the task's Boundaries or Output section?
+- Do they duplicate a skill/system instruction already active in the runtime?
+- Would removing them improve clarity without reducing success?
+
+If yes, omit the literal block.

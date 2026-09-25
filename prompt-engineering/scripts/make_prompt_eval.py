@@ -6,91 +6,11 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from collections.abc import Sequence
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, TypedDict
-
-PromptType = Literal["system", "coding", "image", "research", "extraction", "general"]
+from typing import Any, Sequence
 
 
-class EvalCase(TypedDict):
-    id: str
-    description: str
-    input: str
-    required: list[str]
-    forbidden: list[str]
-    notes: str
-
-
-class PromptVariant(TypedDict):
-    id: str
-    prompt: str | None
-    notes: str
-
-
-class Scoring(TypedDict):
-    scale: dict[str, str]
-    require_evidence_notes: bool
-    blind_review_when_possible: bool
-
-
-class EvalRun(TypedDict, total=False):
-    variant_id: str
-    case_id: str
-    scores: dict[str, int]
-    evidence: str
-    input_tokens: int
-    latency_ms: int
-    cost: float
-
-
-class Decision(TypedDict):
-    selected_variant: str | None
-    reason: str
-    known_tradeoffs: list[str]
-    last_validated_date: str | None
-
-
-class Manifest(TypedDict):
-    title: str
-    prompt_type: PromptType
-    target_model: str
-    runtime: str
-    purpose: str
-    variants: list[PromptVariant]
-    metrics: list[str]
-    scoring: Scoring
-    protocol: list[str]
-    cases: list[EvalCase]
-    runs: list[EvalRun]
-    decision: Decision
-
-
-@dataclass(frozen=True, slots=True)
-class EvalArgs:
-    prompt_type: PromptType
-    model: str
-    runtime: str
-    title: str | None
-    minimal: str | None
-    candidate: str | None
-    out: str
-
-
-class CliNamespace(argparse.Namespace):
-    def __init__(self) -> None:
-        super().__init__()
-        self.prompt_type: PromptType = "system"
-        self.model = "MODEL_ID"
-        self.runtime = "RUNTIME"
-        self.title: str | None = None
-        self.minimal: str | None = None
-        self.candidate: str | None = None
-        self.out = "prompt-eval.json"
-
-
-CASE_SETS: dict[PromptType, list[tuple[str, str]]] = {
+CASE_SETS: dict[str, list[tuple[str, str]]] = {
     "system": [
         ("normal-1", "Common high-frequency task"),
         ("normal-2", "Second common task with different output"),
@@ -112,6 +32,7 @@ CASE_SETS: dict[PromptType, list[tuple[str, str]]] = {
         ("verification", "Change that requires observable runtime verification"),
         ("no-change", "Investigation where the correct result is no code change"),
         ("approval", "Potentially destructive or external action"),
+        ("autonomy", "Task where the agent should choose implementation and delegation without micromanagement"),
     ],
     "image": [
         ("generation-basic", "Simple image generation request"),
@@ -154,24 +75,20 @@ BASE_METRICS = [
     "input_tokens",
     "latency",
     "cost",
+    "process_overconstraint",
 ]
 
-EXTRA_METRICS: dict[PromptType, list[str]] = {
+EXTRA_METRICS: dict[str, list[str]] = {
     "system": ["initiative_calibration", "tool_quality", "approval_calibration"],
     "coding": ["repository_grounding", "verification_quality", "diff_scope", "ui_project_fit"],
     "image": ["composition", "reference_fidelity", "text_fidelity", "edit_preservation"],
-    "research": [
-        "source_quality",
-        "citation_support",
-        "recency_handling",
-        "contradiction_handling",
-    ],
+    "research": ["source_quality", "citation_support", "recency_handling", "contradiction_handling"],
     "extraction": ["schema_validity", "field_accuracy", "null_handling"],
     "general": [],
 }
 
 
-def parse_args(argv: Sequence[str]) -> EvalArgs:
+def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate a baseline/minimal/candidate prompt-eval manifest."
     )
@@ -190,19 +107,9 @@ def parse_args(argv: Sequence[str]) -> EvalArgs:
     parser.add_argument(
         "--out",
         default="prompt-eval.json",
-        help="New output JSON path. Use '-' for stdout. Existing files are never overwritten.",
+        help="Output JSON path. Use '-' for stdout.",
     )
-    namespace = CliNamespace()
-    parser.parse_args(argv, namespace=namespace)
-    return EvalArgs(
-        prompt_type=namespace.prompt_type,
-        model=namespace.model,
-        runtime=namespace.runtime,
-        title=namespace.title,
-        minimal=namespace.minimal,
-        candidate=namespace.candidate,
-        out=namespace.out,
-    )
+    return parser.parse_args(argv)
 
 
 def read_variant(path: str | None, placeholder: str) -> str:
@@ -214,9 +121,9 @@ def read_variant(path: str | None, placeholder: str) -> str:
     return source.read_text(encoding="utf-8")
 
 
-def build_manifest(args: EvalArgs) -> Manifest:
+def build_manifest(args: argparse.Namespace) -> dict[str, Any]:
     prompt_type = args.prompt_type
-    cases: list[EvalCase] = [
+    cases = [
         {
             "id": case_id,
             "description": description,
@@ -227,63 +134,56 @@ def build_manifest(args: EvalArgs) -> Manifest:
         }
         for case_id, description in CASE_SETS[prompt_type]
     ]
-    variants: list[PromptVariant] = [
-        {
-            "id": "baseline",
-            "prompt": None,
-            "notes": "Platform default or no custom prompt. Do not silently replace this with the candidate.",
-        },
-        {
-            "id": "minimal",
-            "prompt": read_variant(args.minimal, "REPLACE_WITH_MINIMUM_EFFECTIVE_PROMPT"),
-            "notes": "Only true durable requirements and measured failure fixes.",
-        },
-        {
-            "id": "candidate",
-            "prompt": read_variant(args.candidate, "REPLACE_WITH_CANDIDATE_PROMPT"),
-            "notes": "Proposed full prompt.",
-        },
-    ]
-    scoring: Scoring = {
-        "scale": {
-            "0": "failed or materially harmful",
-            "1": "partially correct; needs material intervention",
-            "2": "correct and usable without material correction",
-        },
-        "require_evidence_notes": True,
-        "blind_review_when_possible": True,
-    }
-    decision: Decision = {
-        "selected_variant": None,
-        "reason": "",
-        "known_tradeoffs": [],
-        "last_validated_date": None,
-    }
+
     return {
         "title": args.title or f"{prompt_type}-prompt-eval",
         "prompt_type": prompt_type,
         "target_model": args.model,
         "runtime": args.runtime,
         "purpose": "Compare the platform baseline, minimum effective prompt, and candidate prompt on the same observable cases.",
-        "variants": variants,
+        "variants": [
+            {
+                "id": "baseline",
+                "prompt": None,
+                "notes": "Platform default or no custom prompt. Do not silently replace this with the candidate.",
+            },
+            {
+                "id": "minimal",
+                "prompt": read_variant(args.minimal, "REPLACE_WITH_MINIMUM_EFFECTIVE_PROMPT"),
+                "notes": "Only true durable requirements and measured failure fixes.",
+            },
+            {
+                "id": "candidate",
+                "prompt": read_variant(args.candidate, "REPLACE_WITH_CANDIDATE_PROMPT"),
+                "notes": "Proposed full prompt.",
+            },
+        ],
         "metrics": BASE_METRICS + EXTRA_METRICS[prompt_type],
-        "scoring": scoring,
+        "scoring": {
+            "scale": {
+                "0": "failed or materially harmful",
+                "1": "partially correct; needs material intervention",
+                "2": "correct and usable without material correction",
+            },
+            "require_evidence_notes": True,
+            "blind_review_when_possible": True,
+        },
         "protocol": [
             "Use the same inputs, model version, tools, permissions, and sampling settings for every variant.",
             "Randomize or blind variant labels when human review is possible.",
             "Record observable failures, token use, latency, and cost; do not score prompt prose aesthetics.",
             "Ablate one instruction group at a time after the first comparison.",
-            "Keep a larger prompt only when it improves required behavior enough to justify false constraints and cost.",
+            "Keep a larger prompt only when it improves required behavior enough to justify false constraints, process overconstraint, and cost.",
         ],
         "cases": cases,
         "runs": [],
-        "decision": decision,
+        "decision": {
+            "selected_variant": None,
+            "reason": "",
+            "known_tradeoffs": [],
+            "last_validated_date": None,
+        },
     }
-
-
-def escape_console(text: str) -> str:
-    """Return printable ASCII for terminals with unknown encodings."""
-    return ascii(text)[1:-1]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -291,10 +191,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         manifest = build_manifest(args)
     except (OSError, UnicodeError) as exc:
-        print(f"make_prompt_eval: {escape_console(str(exc))}", file=sys.stderr)
+        print(f"make_prompt_eval: {exc}", file=sys.stderr)
         return 2
 
-    rendered = json.dumps(manifest, ensure_ascii=args.out == "-", indent=2) + "\n"
+    rendered = json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
     if args.out == "-":
         sys.stdout.write(rendered)
         return 0
@@ -302,23 +202,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     output = Path(args.out)
     try:
         output.parent.mkdir(parents=True, exist_ok=True)
-        with output.open("x", encoding="utf-8", newline="\n") as stream:
-            stream.write(rendered)
-    except FileExistsError:
-        print(
-            f"make_prompt_eval: output already exists: {escape_console(output.as_posix())}",
-            file=sys.stderr,
-        )
-        return 2
+        output.write_text(rendered, encoding="utf-8")
     except OSError as exc:
-        print(
-            f"make_prompt_eval: could not write {escape_console(output.as_posix())}: "
-            f"{escape_console(str(exc))}",
-            file=sys.stderr,
-        )
+        print(f"make_prompt_eval: could not write {output}: {exc}", file=sys.stderr)
         return 2
 
-    print(escape_console(output.as_posix()))
+    print(output)
     return 0
 
 
