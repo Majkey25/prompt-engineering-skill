@@ -63,6 +63,22 @@ Use smaller task briefs when possible:
 
 Avoid asking one agent to redesign, migrate, refactor, secure, document, and optimize everything in one pass.
 
+## Long-running state
+
+For work likely to span many turns or context compaction, externalize only the state that must survive:
+
+- original goal and finish line
+- open items
+- completed items
+- blockers or approvals needed
+- verification still owed
+
+Prefer an existing project task/progress file. Use a temporary `TASKS.md`-style file only when the runtime benefits from it, and remove or archive it when the workflow requires cleanup. Do not create durable task files for short jobs.
+
+A text-only progress report is not evidence that a long task is finished. If open items remain and no blocker is stated, the harness or next instruction should continue the task rather than treating the report as completion. Bound automatic continuation so a genuinely stuck run cannot loop forever.
+
+When the user sends a follow-up during a running task, treat it as steering that amends the current contract unless they clearly replace, cancel, or narrow the original goal.
+
 ## Fresh chat rule
 
 Start a new agent chat when:
@@ -106,5 +122,6 @@ Do not put timestamps, random IDs, or user-specific volatile data inside the sta
 - long unfiltered logs
 - old assumptions from previous tasks
 - context rot from endless chat
+- keeping the only copy of long-run task state in scrollback when compaction is likely
 - stale or unverified facts promoted into durable system or project instructions
 - duplicated tool schemas and project details inside global prompts
