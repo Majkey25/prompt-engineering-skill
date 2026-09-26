@@ -63,7 +63,7 @@ For Codex and other agents that read AGENTS.md.
 
 ## CLAUDE.md
 
-For Claude Code project memory. Keep short. Delete lines that do not prevent real mistakes.
+For Claude Code project memory. Keep short. Delete lines that do not prevent real mistakes. When the target is Claude Opus 5.5, also apply `claude-opus-5-5.md`.
 
 ```markdown
 # Claude project notes
@@ -74,10 +74,13 @@ For Claude Code project memory. Keep short. Delete lines that do not prevent rea
 - Key scripts: [commands]
 
 ## Rules
-- Explore first -> plan -> code.
+- Inspect enough evidence to act; do not stop at a plan unless the task or risk requires one.
 - Use existing patterns.
 - Keep edits scoped.
 - Verify with [commands/screenshots/expected output].
+- When a step does not need user input, keep going; status notes should accompany the next action rather than replace it.
+- Stop only when work cannot continue without user input or before a real approval boundary.
+- For long runs that may cross context compaction, keep minimal task state in the project's existing progress file or a temporary task file.
 - Manage context. Start fresh after task completion.
 
 ## Do not
