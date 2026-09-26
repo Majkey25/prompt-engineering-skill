@@ -147,6 +147,7 @@ Use these labels:
 - Exact browser console and network result checked?
 - Exact failing-before and passing-after behavior shown?
 - If a check cannot run, is the blocker exact?
+- Are all claims that could not be confirmed marked explicitly, with what was checked or why verification was blocked?
 
 ## Standard strict review text
 
@@ -237,6 +238,9 @@ Nits:
 
 Missing verification:
 - command/flow/check missing and why it matters.
+
+Unverified:
+- claim/risk -> what was checked, and why it could not be confirmed.
 
 Suspicious assumptions:
 - assumption -> why weak.
