@@ -36,7 +36,7 @@ The prompt structure changes by task. Do not use a generic photography template 
 
 ## Evidence and reference rule
 
-Use supplied images, brand assets, sketches, layouts, and text as source material. Do not invent visual facts that are not visible or provided.
+Use supplied images, brand assets, sketches, layouts, and text as source material. Do not invent visual facts that are not visible or provided. When the target runtime can inspect images, prefer the actual screenshot, chart, diagram, or reference over retyping its content into prose; spatial relationships and visual defects can be lost in transcription.
 
 For editing, distinguish:
 
@@ -141,7 +141,7 @@ Use timestamped beats only when timing matters. Do not micromanage every second 
 
 ## Negative constraints
 
-Use negatives for concrete failure prevention:
+Use negatives for concrete failure prevention. If a model repeatedly falls back to an unwanted design default, name the exact pattern to avoid; a vague instruction such as "avoid a generic AI look" is weaker than concrete exclusions.
 
 - no extra text or logos
 - preserve the face and expression
