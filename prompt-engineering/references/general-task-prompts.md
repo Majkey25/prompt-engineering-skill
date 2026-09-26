@@ -34,7 +34,7 @@ Done: [observable success criteria]
 Output: [format, audience, length]
 ```
 
-Use this unless the task needs a narrower pattern below. Do not add a step-by-step process unless the order or method is part of the requirement.
+Use this unless the task needs a narrower pattern below. Do not add a step-by-step process unless the order or method is part of the requirement. If the user wants a finished document, spreadsheet, file, or other artifact, ask the target for the finished deliverable rather than an outline or plan unless planning is the actual task.
 
 ## Writing and editing
 
