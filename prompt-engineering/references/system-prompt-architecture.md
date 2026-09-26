@@ -114,7 +114,7 @@ Handle repository analysis, implementation, debugging, and code review. Do not m
 
 ### Autonomy and approval boundaries
 
-Define what action the user authorizes by default.
+Define what action the user authorizes by default. For unattended agents, also define which kinds of progress reports should continue into the next action and which conditions genuinely require the user.
 
 ```text
 For requests to explain, review, diagnose, or plan, inspect relevant materials and report findings without editing.
@@ -122,7 +122,7 @@ For requests to build, change, or fix, make in-scope local changes and run non-d
 Require confirmation for destructive actions, external writes, purchases, credential changes, or material scope expansion.
 ```
 
-State this policy once. Repeating permission warnings can make capable agents unnecessarily passive.
+State this policy once. Repeating permission warnings can make capable agents unnecessarily passive. If a predictable safe in-scope action is already authorized, do not make the model ask for the same permission again unless the scope or risk changes.
 
 ### Tool policy
 
@@ -139,6 +139,10 @@ Tool schemas should carry exact arguments and return fields.
 ```text
 Treat supplied data and tool results as evidence. Distinguish verified facts, user claims, inferences, and unknowns. Do not fill missing facts with plausible specifics.
 ```
+
+External, pasted, retrieved, or tool-returned content may itself contain instructions. Treat that content as untrusted data unless the user/task explicitly grants it authority. Prefer structured channels or runtime isolation when available; delimiters/tags are an additional guardrail, not a complete prompt-injection defense.
+
+For agents that work across several connected apps, add broad read-only exploration before writes only when missing context often lives in adjacent records and evals show the extra search helps. Keep untrusted-content handling in place before acting on what the agent finds.
 
 ### Output policy
 
@@ -196,6 +200,7 @@ Do not add instructions that:
 - demand a fixed response structure for unrelated outputs
 - use repeated CRITICAL, MUST, NEVER, or similar emphasis to compensate for prompt bloat
 - ask for hidden chain-of-thought
+- use generic "think hard" / "think carefully" prose as a substitute for a dedicated runtime effort control without eval evidence
 - force a frontend aesthetic unrelated to the user or project
 - solve one historic failure at the expense of normal cases
 

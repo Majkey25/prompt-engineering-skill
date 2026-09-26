@@ -13,6 +13,7 @@ Run before returning an important generated prompt or using an autoprompt brief.
 - Output format is specified only as tightly as needed.
 - Verification/evidence expectations exist when the outcome matters.
 - Failure/uncertainty behavior exists for factual, risky, or incomplete tasks.
+- External/pasted/tool-returned content is separated from instructions when it can contain untrusted commands.
 - Unsupported assumptions are not presented as facts.
 - Prompt specificity does not exceed supplied or verified evidence.
 - The prompt is no larger or more prescriptive than the task and eval evidence justify.
@@ -34,11 +35,13 @@ Otherwise remove it and let the target choose the path.
 ## Agentic prompt must pass
 
 - Action requests do not accidentally stop at a plan.
+- Long autonomous tasks have an observable finish line and real stop/ask conditions; progress updates are not mistaken for completion.
+- Predictable safe in-scope actions already authorized by the user do not trigger repeated permission requests unless risk/scope changes.
 - Scope blocks unrelated features, cleanup, refactors, and redesigns.
 - The agent may choose method/files/tools/delegation inside scope unless restricted for a reason.
 - Destructive, irreversible, externally visible, costly, or materially out-of-scope actions have an approval boundary when the runtime does not already enforce one.
 - Clarification is requested only when ambiguity could materially change correctness, safety, authorization, or the requested outcome.
-- Verification asks for evidence, not fake certainty.
+- Verification asks for evidence, not fake certainty, and unverified items are marked explicitly.
 
 ## Coding-agent must pass
 
@@ -60,6 +63,7 @@ Otherwise remove it and let the target choose the path.
 - Contains durable cross-task behavior, not current task data or guessed project facts.
 - Separates advisory prompt rules from deterministic controls.
 - Does not encode a fixed tool sequence or planning ritual without a durable reason.
+- Does not use prompt prose as a substitute for dedicated model/runtime reasoning controls unless evals show that text helps.
 - States each instruction once and resolves conflicts.
 - Has representative eval cases and an ablation path when important.
 - Accepts a shorter/blank custom prompt when it performs better.

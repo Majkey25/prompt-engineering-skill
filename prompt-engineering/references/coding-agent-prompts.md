@@ -36,6 +36,7 @@ Unknowns:
 - Preserve existing behavior, interfaces, style, and architecture unless the task requires a change.
 - Choose the files, implementation approach, tools, and delegation yourself based on repository evidence.
 - Ask before destructive, hard-to-reverse, externally visible, costly, or materially out-of-scope actions.
+- If the user has already authorized a predictable safe in-scope action, do not ask again unless the scope or risk changes.
 - If ambiguity does not materially affect correctness, safety, authorization, or the requested outcome, choose the narrowest reasonable interpretation and proceed.
 
 # Done
@@ -47,10 +48,10 @@ You are done when:
 - the diff contains no unrelated changes,
 - and any remaining blocker or risk is stated concretely.
 
-Do not stop at a plan or explanation when implementation was requested. Continue while a safe, in-scope next action can complete or materially verify the task.
+Do not stop at a plan or explanation when implementation was requested. Continue while a safe, in-scope next action can complete or materially verify the task. A progress summary is not completion while the done criteria still have open items.
 
 # Verification
-Use the project's existing verification path and real runtime/workflow where practical. Choose checks proportionate to the change. Do not weaken tests or fake success. If verification cannot run, report the exact blocker.
+Use the project's existing verification path and real runtime/workflow where practical. Choose checks proportionate to the change. Do not weaken tests or fake success. If verification cannot run, report the exact blocker. Mark anything you could not verify and say what you checked or attempted.
 
 # Final response
 Keep it concise. State what changed, what was verified, and only real remaining blockers or risks.
@@ -122,6 +123,8 @@ Choose the implementation approach, files, tools, and any useful delegation your
 
 Do not prescribe a fixed number of subagents, exact file list, or tool sequence unless required.
 
+For long autonomous work, pair decision authority with explicit stop conditions. If predictable safe actions would otherwise cause repeated permission checks and the user has already authorized them, name that authorization up front rather than forcing the agent to ask again.
+
 ## Clarification policy
 
 Prevent unnecessary stalls without authorizing risky guessing:
@@ -159,6 +162,23 @@ If over-delegation is a problem:
 Use subagents only for independent or parallel work that benefits from isolated context. For simple, sequential, single-file, or tightly coupled work, act directly.
 ```
 
+When the prompt explicitly asks for fan-out, make the lead agent check each subagent's evidence before accepting the result.
+
+## Long-running agentic work
+
+Use this add-on only for genuinely long or multi-part tasks:
+
+```text
+Treat this as one task, not a sequence of permission gates. Keep going while a safe in-scope next action exists.
+Done means: [observable finish line].
+Stop and ask only when: [real blocker / approval boundary].
+Status updates should accompany continued work rather than replace it.
+```
+
+If the run may cross context compaction and the runtime supports files, keep a small durable checklist in the project's existing task/progress file or a temporary task file. Record only open items, completed items, blockers, and verification state. Do not create task-state files for short work.
+
+Treat mid-run follow-ups as amendments to the current task unless the user explicitly says to replace or cancel the original goal.
+
 ## Verification
 
 Prompt for evidence, not a ceremonial command checklist.
@@ -166,7 +186,7 @@ Prompt for evidence, not a ceremonial command checklist.
 Default:
 
 ```text
-Verify the changed behavior using the project's strongest relevant existing checks and the real workflow/runtime where practical. Match verification depth to risk. If a check is unavailable, report the exact blocker rather than claiming success.
+Verify the changed behavior using the project's strongest relevant existing checks and the real workflow/runtime where practical. Match verification depth to risk. If a check is unavailable, report the exact blocker rather than claiming success. Mark anything you could not confirm and say what you checked.
 ```
 
 Name exact commands, browsers, endpoints, screenshots, or test suites when:
@@ -228,7 +248,8 @@ Do not paste them automatically. Use the behaviors while authoring the prompt. I
 
 - Keep CLAUDE.md short and durable.
 - Let Claude inspect project state instead of pre-writing its implementation plan.
-- Give it verification access and clear completion criteria.
+- Give it verification access, clear completion criteria, and explicit stop/continue behavior for long runs.
+- When the target is Claude Opus 5.5, load `claude-opus-5-5.md` and keep model-specific effort/thinking guidance out of generic prompts.
 
 ### Cursor / Copilot / Windsurf / Aider
 

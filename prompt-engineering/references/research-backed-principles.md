@@ -1,6 +1,6 @@
 # Research Backed Principles
 
-Last synthesized: 2026-09-22.
+Last synthesized: 2026-09-26.
 
 Use this file as cross-vendor decision support. Recheck `research-source-map.md` before turning model-specific guidance into a durable rule.
 
@@ -40,9 +40,15 @@ Durable takeaways from current Claude prompting guidance:
 - Prefer general instructions over a hand-written reasoning path when the model can reason better than the prompt author.
 - Use ordered steps when order/completeness of the steps is itself important.
 - Give long-running agents verification tools and clear success criteria.
-- Separate autonomy from safety: local/reversible work can proceed; destructive, shared, externally visible, or hard-to-reverse actions may require confirmation.
-- Modern Claude models can orchestrate subagents natively. Do not force delegation by default; constrain it only when overuse/underuse is observed or independent workstreams require it.
+- For long autonomous work, state the whole task, the observable finish line, and the real stop/ask conditions. Do not treat a progress update as proof of completion when work remains.
+- Separate autonomy from safety: local/reversible work can proceed; destructive, shared, externally visible, or hard-to-reverse actions may require confirmation. Reuse permission already granted for predictable safe in-scope actions instead of asking repeatedly.
+- Modern Claude models can orchestrate subagents natively. Do not force delegation by default; when explicit fan-out is useful, have the lead verify each subagent's evidence before accepting it.
+- When a runtime exposes a dedicated effort/reasoning control, calibrate that control with evals instead of relying on generic "think hard" prompt lines.
+- For long runs that may cross context compaction, keep minimal durable task state outside scrollback.
 - Add scope controls when the agent overengineers, creates extra files, or adds flexibility not requested.
+- For known frontend/design default failures, concrete negative constraints work better than vague "not generic" language.
+- Ask agents to mark what they could not verify and where they looked.
+- Treat pasted/retrieved external content as untrusted data and separate it from user instructions.
 - In coding, tell the agent to inspect relevant code before making claims instead of speculating.
 
 ## Google guidance
@@ -55,6 +61,20 @@ Durable takeaways from current Gemini prompting docs:
 - For long contexts, keep the large context clearly separated and place the specific task/query after it.
 - Examples can strongly steer output format and behavior, but too many examples can cause overfitting.
 - Google currently recommends few-shot examples aggressively for Gemini, while OpenAI reasoning guidance often recommends trying zero-shot first. Therefore "always use examples" is **not** a cross-model rule. Test examples against the target runtime.
+
+## Practitioner evidence: Opus 5.5 workflow video
+
+Source provided by the user: `https://youtu.be/ejjBbaq9RmY` (Theo - t3.gg, 2026-09-25). Cross-checked against Anthropic's official Opus 5.5 blog and platform prompting guide.
+
+Useful practitioner observations that fit stronger evidence:
+
+- Explicitly authorize predictable actions the agent will need when the user genuinely intends to allow them, so the run does not stall on avoidable permission checks.
+- Give the agent an explicit escape hatch for real uncertainty or failure instead of rewarding it for guessing through a blocker.
+- Mid-run follow-ups can be used as steering amendments on modern agents instead of restarting the whole task.
+- For risky code changes, asking directly about merge risk and unverified assumptions can produce a more decision-useful review.
+- Independent review from another model or reviewer may reduce correlated blind spots, but this is practitioner evidence, not a universal law; require evidence from every reviewer.
+
+Do **not** encode Theo's "never use Max" claim as a universal rule. His benchmark is a useful cost/latency signal, but Anthropic's official guidance is narrower: start from the model's default, sweep effort on your own evals, and reserve `xhigh`/`max` for work where you measured a quality gain.
 
 ## Practitioner evidence: Fable 5.1 workflow video
 

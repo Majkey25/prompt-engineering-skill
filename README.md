@@ -22,6 +22,7 @@ It turns vague requests into clear prompt contracts: objective, context, task, c
 - Creates prompts for coding agents, research agents, RAG systems, extraction/classification, writing, and workflows
 - Routes coding prompts by available evidence instead of inventing repository details
 - Covers system/developer prompts, general tasks, and image/video generation
+- Adds scoped Claude Opus 5.5 guidance for long-running agents, effort controls, steering, verification, and prompt-injection boundaries
 - Documents what a best-practice prompt should look like
 - Builds reusable agent instruction files without bloated prompt folklore
 - Adds eval/check criteria so prompt quality can be measured
@@ -141,6 +142,7 @@ Return summary, files changed, verification run, blockers, and remaining risks.
 | System/developer prompts | [`system-prompt-architecture.md`](./prompt-engineering/references/system-prompt-architecture.md) |
 | General tasks | [`general-task-prompts.md`](./prompt-engineering/references/general-task-prompts.md) |
 | Image and video prompts | [`image-video-prompts.md`](./prompt-engineering/references/image-video-prompts.md) |
+| Claude Opus 5.5 | [`claude-opus-5-5.md`](./prompt-engineering/references/claude-opus-5-5.md) |
 | Research-backed rules | [`research-backed-principles.md`](./prompt-engineering/references/research-backed-principles.md) |
 | Prompt quality checklist | [`prompt-quality-checklist.md`](./prompt-engineering/references/prompt-quality-checklist.md) |
 | Evals and iteration | [`evals-and-iteration.md`](./prompt-engineering/references/evals-and-iteration.md) |
@@ -175,6 +177,7 @@ python prompt-engineering/scripts/make_prompt_eval.py --type coding --out prompt
         ├── best-prompt-blueprint.md
         ├── universal-prompt-framework.md
         ├── coding-agent-prompts.md
+        ├── claude-opus-5-5.md
         ├── research-backed-principles.md
         └── ...
 ```
