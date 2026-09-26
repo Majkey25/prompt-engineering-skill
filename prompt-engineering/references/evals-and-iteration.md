@@ -10,6 +10,14 @@ For important prompts, compare at least three variants on the same cases:
 
 A blank or shorter prompt is allowed to win.
 
+## Separate prompt text from runtime controls
+
+Keep model/runtime controls stable while comparing prompt variants. If the runtime exposes effort, reasoning depth, temperature, tool permissions, timeouts, or similar controls, evaluate those as separate dimensions rather than smuggling them into prose.
+
+For reasoning-capable models, do not assume a line such as "think harder" is equivalent to raising a dedicated effort control. Sweep the actual runtime setting against representative evals. Do not carry effort labels or defaults from one model/version to another without re-testing.
+
+For long autonomous agents, include eval cases for premature stopping, needless permission checks, repeated continuation loops, and failure to surface unverified work.
+
 ## Start with success criteria
 
 Before improving a prompt, define what good output looks like.
@@ -112,6 +120,9 @@ Use observable checks:
 - C0 prompts avoid unsupported files, functions, stacks, commands, tests, env vars, and UI choices
 - C1 prompts label hypotheses and verify them
 - C2 prompts use correct inspected project specifics
+- long tasks reach their done state without treating a progress update as completion
+- the agent asks only at real blocker/approval boundaries
+- unverified items are explicitly marked rather than silently presented as complete
 
 ## Done definition template
 
