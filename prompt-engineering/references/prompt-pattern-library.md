@@ -42,7 +42,7 @@ Good delimiters:
 
 ## XML-style tags
 
-Use for long docs, multiple sources, and Claude-style prompts.
+Use for long documents or multiple sources when delimiters clarify evidence boundaries.
 
 ```xml
 <documents>

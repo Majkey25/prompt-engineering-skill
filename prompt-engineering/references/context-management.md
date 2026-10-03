@@ -24,12 +24,12 @@ For API prompts and reusable templates:
 
 This improves cacheability when prefix caching exists and keeps repeated structure stable.
 
-For long-document QA, especially Claude-style long context:
+For long-document QA, when supported by target-model guidance or evals:
 
 1. Put long documents near the top.
 2. Put the query/instructions near the end.
 3. Wrap documents in tags.
-4. Ask for relevant quotes first, then answer from them.
+4. Ground the answer in relevant passages. Request short quotations only when useful and within source quotation limits.
 
 ## Compact error pattern
 

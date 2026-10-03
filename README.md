@@ -22,7 +22,9 @@ It turns vague requests into clear prompt contracts: objective, context, task, c
 - Creates prompts for coding agents, research agents, RAG systems, extraction/classification, writing, and workflows
 - Routes coding prompts by available evidence instead of inventing repository details
 - Covers system/developer prompts, general tasks, and image/video generation
-- Adds scoped Claude Opus 5.5 guidance for long-running agents, effort controls, steering, verification, and prompt-injection boundaries
+- Audits conflicting instruction stacks and preserves real approval boundaries
+- Checks source access, separates prompt text from runtime controls, and matches verification to risk
+- Includes a full video-source audit and practical examples for artifacts, updates, follow-ups, rewrites, and coding fixes
 - Documents what a best-practice prompt should look like
 - Builds reusable agent instruction files without bloated prompt folklore
 - Adds eval/check criteria so prompt quality can be measured
@@ -30,9 +32,9 @@ It turns vague requests into clear prompt contracts: objective, context, task, c
 
 ## Core idea
 
-The best prompt is the shortest complete contract that lets a model produce the desired output and lets a human or tool verify success.
+Start with the shortest complete contract that defines the result and how to check it. Compare important prompts on the actual target runtime; concise wording alone does not prove quality.
 
-A strong prompt usually includes:
+Choose only the fields the task needs:
 
 1. Objective
 2. Context and source data
@@ -49,9 +51,9 @@ The full researched blueprint lives in [`prompt-engineering/references/best-prom
 
 ## Why this skill is different
 
-Most prompt libraries collect clever phrases. This skill removes that noise.
+Use task-specific contracts and evidence instead of stock phrases.
 
-It follows current guidance from OpenAI, Anthropic, Google Gemini, Microsoft Azure OpenAI, prompt-engineering survey research, and the principle that prompts are technical debt. It avoids stale generic rules like always forcing visible chain-of-thought or stuffing every prompt with persona language.
+It combines primary provider guidance and research with explicit source-review dates. It avoids stale generic rules like always forcing visible chain-of-thought or stuffing every prompt with persona language.
 
 For reasoning models, it prefers simple direct prompts, internal validation, concise rationale when useful, and explicit success criteria. For important prompts, it pushes eval cases and iteration instead of guessing.
 
@@ -142,7 +144,10 @@ Return summary, files changed, verification run, blockers, and remaining risks.
 | System/developer prompts | [`system-prompt-architecture.md`](./prompt-engineering/references/system-prompt-architecture.md) |
 | General tasks | [`general-task-prompts.md`](./prompt-engineering/references/general-task-prompts.md) |
 | Image and video prompts | [`image-video-prompts.md`](./prompt-engineering/references/image-video-prompts.md) |
-| Claude Opus 5.5 | [`claude-opus-5-5.md`](./prompt-engineering/references/claude-opus-5-5.md) |
+| Instruction-stack audit | [`instruction-audit.md`](./prompt-engineering/references/instruction-audit.md) |
+| Runtime calibration | [`runtime-calibration.md`](./prompt-engineering/references/runtime-calibration.md) |
+| Practical task contracts | [`task-contract-examples.md`](./prompt-engineering/references/task-contract-examples.md) |
+| Video analysis and source decisions | [`video-xfhbepnyiks-audit.md`](./prompt-engineering/references/video-xfhbepnyiks-audit.md) |
 | Research-backed rules | [`research-backed-principles.md`](./prompt-engineering/references/research-backed-principles.md) |
 | Prompt quality checklist | [`prompt-quality-checklist.md`](./prompt-engineering/references/prompt-quality-checklist.md) |
 | Evals and iteration | [`evals-and-iteration.md`](./prompt-engineering/references/evals-and-iteration.md) |
@@ -177,7 +182,10 @@ python prompt-engineering/scripts/make_prompt_eval.py --type coding --out prompt
         ├── best-prompt-blueprint.md
         ├── universal-prompt-framework.md
         ├── coding-agent-prompts.md
-        ├── claude-opus-5-5.md
+        ├── instruction-audit.md
+        ├── runtime-calibration.md
+        ├── task-contract-examples.md
+        ├── video-xfhbepnyiks-audit.md
         ├── research-backed-principles.md
         └── ...
 ```

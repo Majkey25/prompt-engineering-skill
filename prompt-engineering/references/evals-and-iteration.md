@@ -134,3 +134,9 @@ Done ->
 - [risks] listed
 - final output matches format
 ```
+
+## Source-access and review regressions
+
+Include cases with inaccessible named files, unavailable apps, conflicting source versions, silence with no known cause, missing owners or due dates, explicit draft-review gates, pre-authorized final actions, and overly broad instruction rules. Include both a tiny rewrite and a consequential multi-step change to test verification calibration.
+
+Required checks and authorization errors are hard failures; a shorter or faster output cannot compensate for them. A self-check instruction is not proof that checking occurred. Use actual artifacts, source support, executed checks, or recorded actions. State whether validation was executed or only designed.

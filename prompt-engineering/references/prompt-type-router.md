@@ -46,7 +46,7 @@ Specificity ceiling:
 
 Never fill a template slot merely because it exists.
 
-After prompt type routing, check for model/runtime-specific guidance. For Claude Opus 5.5 or Claude Code using it, load `claude-opus-5-5.md`. Keep provider-specific behavior scoped; do not silently convert it into a cross-vendor rule.
+For model migrations or runtime tuning, use `runtime-calibration.md`. For instruction-file audits, use `instruction-audit.md`. Keep target-specific behavior scoped and verify current official documentation before using it. Do not load unrelated references merely because they are listed.
 
 ## Prompt length policy
 
