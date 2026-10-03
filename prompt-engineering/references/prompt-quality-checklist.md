@@ -116,3 +116,15 @@ Bad -> Better
 7. Is unrelated scope expansion blocked?
 8. Would the target likely do better with less instruction?
 9. Which exact rule would I remove first in an ablation?
+
+## Input access and stopping check
+
+- Sources, apps, and files are available to the target, or missing-access handling is explicit.
+- Source versions and relevant periods are defined when freshness affects correctness.
+- Audience, artifact type, factual preservation, and review stage match the task.
+- Observations, hypotheses, and recommendations are distinguished when needed.
+- Verification covers material risks without an arbitrary check count.
+- An approval gate does not block independent authorized preparation.
+- Explicit review gates remain intact when rewriting prompts.
+- Behavior-changing rules can be traced to their exact source; use `instruction-audit.md`.
+- External skill directives are optional and have a portable fallback.

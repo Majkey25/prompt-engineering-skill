@@ -57,3 +57,11 @@ For skill maintenance final answers, report:
 3. files changed
 4. validation result
 5. remaining uncertainty
+
+## Video and inaccessible-source evidence
+
+Record the title, author, URL, publication date, duration, access method, and coverage. A complete transcript supports spoken-content analysis; it does not establish unread on-screen content. State caption errors or missing visual access when material. Never claim to have watched an inaccessible stream.
+
+Map source segments to existing coverage, additions, and rejected claims. Distinguish a new rule from a new example of an existing rule. Add timestamps where they help trace the source. Prefer original compact examples over copied scripts.
+
+Do not accept presenter attribution as proof of a primary source. Follow the relevant official source and check the actual claim. Narrow blanket rules such as one check per task, no confirmation, or a fixed effort level. Preserve explicit user requirements during prompt rewrites.

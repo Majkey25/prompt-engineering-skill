@@ -180,3 +180,7 @@ When baseline or minimal wins, use it. A blank or short prompt is a valid result
 ```
 
 Use `scripts/make_prompt_eval.py` to create a starter manifest.
+
+## Instruction-stack and source-access cases
+
+Add a task where an advisory rule conflicts with current user intent, one where a real review gate must remain, one with an authorized final action, and one where a source is named but inaccessible. Check that the assistant identifies the exact accessible rule causing a stop, does independent authorized preparation, and reports unavailable evidence without inventing it.

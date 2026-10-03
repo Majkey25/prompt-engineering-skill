@@ -16,4 +16,4 @@ Use the dedicated `unslop` skill as the final prose pass whenever it is availabl
 - Remove generic AI filler, decorative headings, forced rule-of-three structures, vague claims, fake enthusiasm, and canned conclusions.
 - Prefer plain words, active voice, concrete facts, and sentence-case headings.
 - Do not use Unslop to relax technical requirements or delete necessary caveats.
-- In technical agent prompts, place `@unslop` beside `@ponytail` and `@caveman` unless the prompt must be exact JSON/code-only or another strict schema.
+- Treat style skills as authoring aids. Include literal directives only when requested, supported by the target runtime, or justified by evals. If an external style skill is unavailable, apply this reference directly.

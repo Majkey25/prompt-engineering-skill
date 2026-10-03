@@ -1,8 +1,20 @@
 # Changelog
 
-## Unreleased
+## 2026-10-03
 
-- Added model-scoped Claude Opus 5.5 prompting and harness guidance based on Anthropic primary sources and a full practitioner-video cross-check
+- Replaced model-specific guidance with a portable prompt workflow and removed its profile and cross-links
+- Analyzed the complete 19:23 user-provided video transcript and cross-checked technical recommendations with current OpenAI primary sources
+- Added instruction audits with exact rule provenance, behavior effects, scoped revisions, and regression cases
+- Added source-access checks, audience and artifact contracts, missing-field handling, and factual preservation
+- Added risk-matched verification and separated draft preparation from final approval boundaries
+- Added original examples for research artifacts, project updates, follow-up drafts, short rewrites, and repository fixes
+- Removed contradictory automatic style directives and added a portable style fallback
+- Reduced the main instruction file to 137 lines while keeping detailed references available on demand
+- Passed skill validation, local reference checks, and 10 existing helper tests
+- Assessed five prompt-generation scenarios in fresh agent threads; this is a qualitative check, not a measured cross-model performance gain
+
+## Earlier changes
+
 - Added explicit long-run finish/continue/stop contracts, bounded durable task state, and steering semantics
 - Separated runtime effort controls from prompt prose and added eval rules for premature stopping, repeated permission checks, and unverified work
 - Added concrete visual-negative guidance, actual-reference preference, and stronger untrusted pasted-content boundaries

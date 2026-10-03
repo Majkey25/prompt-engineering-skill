@@ -179,4 +179,8 @@ When improving a prompt, preserve valid requirements. Do not add invented contex
 
 ## Final prose pass
 
-Apply the `unslop` skill to finished human-readable prompt text. Preserve exact schemas, code, quotations, commands, and other literal output constraints.
+Apply the `unslop` skill when available; otherwise use `unslop-style.md` for finished human-readable prompt text. Preserve exact schemas, code, quotations, commands, and other literal output constraints.
+
+## Source-based artifacts and drafts
+
+Use `task-contract-examples.md` for research artifacts, updates, follow-up drafts, and short factual rewrites. Specify accessible sources, relevant version or period, audience, artifact, preservation constraints, and review stage. Mark missing owners, dates, amounts, or evidence; do not invent them to complete a table. Separate draft preparation from sending or publishing.

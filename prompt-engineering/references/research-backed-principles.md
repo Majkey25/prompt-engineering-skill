@@ -1,6 +1,6 @@
 # Research Backed Principles
 
-Last synthesized: 2026-09-26.
+Last updated: 2026-10-03. New video-derived changes were cross-checked against current OpenAI primary guidance. Earlier cross-vendor sources retain their prior review scope.
 
 Use this file as cross-vendor decision support. Recheck `research-source-map.md` before turning model-specific guidance into a durable rule.
 
@@ -61,20 +61,6 @@ Durable takeaways from current Gemini prompting docs:
 - For long contexts, keep the large context clearly separated and place the specific task/query after it.
 - Examples can strongly steer output format and behavior, but too many examples can cause overfitting.
 - Google currently recommends few-shot examples aggressively for Gemini, while OpenAI reasoning guidance often recommends trying zero-shot first. Therefore "always use examples" is **not** a cross-model rule. Test examples against the target runtime.
-
-## Practitioner evidence: Opus 5.5 workflow video
-
-Source provided by the user: `https://youtu.be/ejjBbaq9RmY` (Theo - t3.gg, 2026-09-25). Cross-checked against Anthropic's official Opus 5.5 blog and platform prompting guide.
-
-Useful practitioner observations that fit stronger evidence:
-
-- Explicitly authorize predictable actions the agent will need when the user genuinely intends to allow them, so the run does not stall on avoidable permission checks.
-- Give the agent an explicit escape hatch for real uncertainty or failure instead of rewarding it for guessing through a blocker.
-- Mid-run follow-ups can be used as steering amendments on modern agents instead of restarting the whole task.
-- For risky code changes, asking directly about merge risk and unverified assumptions can produce a more decision-useful review.
-- Independent review from another model or reviewer may reduce correlated blind spots, but this is practitioner evidence, not a universal law; require evidence from every reviewer.
-
-Do **not** encode Theo's "never use Max" claim as a universal rule. His benchmark is a useful cost/latency signal, but Anthropic's official guidance is narrower: start from the model's default, sweep effort on your own evals, and reserve `xhigh`/`max` for work where you measured a quality gain.
 
 ## Practitioner evidence: Fable 5.1 workflow video
 
@@ -157,3 +143,11 @@ Prompt quality is empirical. For important prompts compare:
 3. candidate prompt.
 
 Measure task success, false constraints, unsupported specificity, unnecessary process prescription, token cost, and target-domain quality. Remove rules that do not earn their weight.
+
+## 2026-10-03 update synthesis
+
+The complete transcript at `https://www.youtube.com/watch?v=xfHbePnyiks` mostly reinforces existing outcome, context, completion, and runtime-control guidance. New operational details are in `instruction-audit.md`, `runtime-calibration.md`, and `task-contract-examples.md`. See `video-xfhbepnyiks-audit.md` for segment coverage and corrections.
+
+Keep core contracts independent of named model versions. Check evidence access before increasing reasoning effort. Trace stopping rules to exact sources. Complete authorized preparation before a final approval gate. Use a bounded set of checks that covers material risks, not a universal one-check limit. Keep style samples separate from factual evidence and provide a fallback when an external style skill is unavailable.
+
+These are conditional practices and evaluation candidates, not guarantees of maximum prompt quality.

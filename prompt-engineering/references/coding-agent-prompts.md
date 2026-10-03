@@ -249,7 +249,7 @@ Do not paste them automatically. Use the behaviors while authoring the prompt. I
 - Keep CLAUDE.md short and durable.
 - Let Claude inspect project state instead of pre-writing its implementation plan.
 - Give it verification access, clear completion criteria, and explicit stop/continue behavior for long runs.
-- When the target is Claude Opus 5.5, load `claude-opus-5-5.md` and keep model-specific effort/thinking guidance out of generic prompts.
+- Verify target-specific configuration through current official docs when tuning is requested. Keep effort settings out of generic task prompts.
 
 ### Cursor / Copilot / Windsurf / Aider
 

@@ -274,3 +274,7 @@ When the user requests an audit, design rationale, implementation package, or pr
 ## Final prose pass
 
 Apply the `unslop` skill to finished human-readable prompt text. Preserve exact schemas, code, quotations, commands, and other literal output constraints.
+
+## Trace behavior-changing instructions
+
+For an instruction audit, use `instruction-audit.md`. Quote the relevant rule with its actual source, explain the behavior it changes, and propose a scoped replacement. Do not mistake an advisory skill guideline for mandatory platform policy. Preserve explicit user review gates and authorization boundaries. Make authorized preparation concrete before a final approval request.

@@ -1,6 +1,6 @@
 # Research Source Map
 
-Last reviewed: 2026-09-26.
+Last update: 2026-10-03. OpenAI sources used for this update were checked on that date; earlier Anthropic, Google, and research summaries were retained from the 2026-09-26 review.
 
 Use this file to trace the skill's prompting rules. Recheck current model-specific guidance before making strong provider-specific claims.
 
@@ -79,27 +79,6 @@ Relevant guidance:
 - Use empirical tests/evals.
 - Not every failure is best solved by adding prompt text.
 
-### Claude Opus 5.5 model-specific prompting
-
-Sources:
-
-- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5
-- https://claude.dev/blog/getting-the-most-out-of-opus-5-5/
-
-Relevant guidance:
-
-- Give long autonomous work the whole task, an observable finish line, and explicit stop/ask conditions.
-- Treat progress-only turns as reports rather than proof that an unattended task is complete; keep bounded task state outside scrollback when needed.
-- Use the runtime `effort` control as the main reasoning-depth knob. Re-test effort by model/version and reserve the highest levels for measured quality gains.
-- Remove legacy "think hard" instructions when they only duplicate model/runtime reasoning behavior.
-- Concrete negative design constraints work better than vague requests to avoid generic output.
-- Mark what could not be confirmed, and preserve real approval boundaries even when asking an agent to keep going.
-- Treat pasted external content as untrusted data and separate it from user-authored instructions.
-- For multi-app automation, broader read-only context exploration can help before actions when relevant context may live outside the named record.
-- For multiagent harnesses, elapsed-time/budget signals can improve parallel pacing, but hard timeouts remain a runtime control.
-
-Interpretation used by this skill: load these rules only for Claude Opus 5.5 / Claude Code targets unless cross-vendor evidence supports a broader version.
-
 ## Google
 
 ### Gemini prompt design strategies
@@ -117,12 +96,6 @@ Relevant guidance:
 Google currently recommends few-shot examples more aggressively than OpenAI's reasoning-model guidance. This skill treats that as provider-specific evidence, not a universal rule. Use evals.
 
 ## Practitioner source
-
-### Theo - Getting the most out of Opus 5.5
-
-Source: https://youtu.be/ejjBbaq9RmY
-
-Use as field evidence, not provider authority. Durable points that survive cross-checking: explicit finish lines, explicit stop conditions, pre-authorized safe in-scope actions, steering instead of unnecessary restarts, concrete design negatives, unverified-item reporting, and independent review as a possible diversity check. Do not generalize the video's "never Max" recommendation; use official effort calibration and evals.
 
 ### Fable 5.1 prompting workflow video
 
@@ -166,3 +139,14 @@ The combined evidence supports:
 - process prescription only when necessary,
 - examples as an evaluated tool rather than ritual,
 - prompt ablation and deletion of stale rules.
+
+## Sources checked for the 2026-10-03 video update
+
+- User video: https://www.youtube.com/watch?v=xfHbePnyiks. Full automatic-caption transcript; title, author, date, and chapters checked in the page. See `video-xfhbepnyiks-audit.md` for limits and decisions.
+- OpenAI model guide: https://developers.openai.com/api/docs/guides/latest-model. Auditing instruction files, authorized preparation, output style, and calibrated testing.
+- OpenAI engineering article: https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra. Conditional document loading and revisiting stale stopping rules.
+- ChatGPT Work guidance: https://learn.chatgpt.com/docs/get-started-with-work. Source-grounded artifacts and review stages.
+- Work/Codex usage guidance: https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex. More effort does not supply missing evidence or access.
+- ChatGPT thinking controls: https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt. Wording does not automatically change the chosen level.
+
+Model-specific configuration and benchmark statements remain scoped to these sources. The reusable audits and examples are the skill's operational synthesis; evaluate them on the actual target.

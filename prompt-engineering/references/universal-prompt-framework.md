@@ -96,4 +96,4 @@ Output -> [shape]
 
 ## Final prose pass
 
-Apply `unslop` to human-readable prompt text. Preserve exact schemas, commands, quotations, and literal constraints.
+Apply `unslop` when available; otherwise use `unslop-style.md` for human-readable prompt text. Preserve exact schemas, commands, quotations, and literal constraints.

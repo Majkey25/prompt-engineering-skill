@@ -71,3 +71,7 @@ Own the task through completion. Do not stop at a plan if you can safely continu
 - Do not invent files, functions, frameworks, commands, sources, dates, people, or other specifics.
 - Do not force subagents, exact tools, or a step list without a real reason.
 - Do not make a custom system prompt larger than the behavior gap it must fix.
+
+## Access and review stage
+
+Confirm which sources the target can actually inspect. Do not assume a named app is connected or a named file is present. Define the artifact and audience when relevant, preserve factual fields, and identify whether the finish line is a draft, a verified change, or an authorized external action. Prepare independent authorized work before a real approval gate. Match checks to material failure modes rather than a fixed count.

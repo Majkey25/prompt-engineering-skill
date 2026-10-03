@@ -63,7 +63,7 @@ For Codex and other agents that read AGENTS.md.
 
 ## CLAUDE.md
 
-For Claude Code project memory. Keep short. Delete lines that do not prevent real mistakes. When the target is Claude Opus 5.5, also apply `claude-opus-5-5.md`.
+For Claude Code project memory. Keep verified, durable project facts short. Audit behavior-changing rules with `instruction-audit.md`. Make document loading conditional on the affected work.
 
 ```markdown
 # Claude project notes
@@ -175,3 +175,7 @@ Use `CONVENTIONS.md` for repeated rules:
 - rules that contradict each other
 - guessed commands, paths, frameworks, architecture, or test setup presented as project facts
 - generic UI taste imposed on every feature without project or brand evidence
+
+## Conditional loading and instruction audit
+
+Point to documents by the task they support. Do not require every document before every edit. Keep current task details out of durable rules. Use `instruction-audit.md` to trace approval, stopping, formatting, and testing rules to their sources, preserve necessary boundaries, and remove measured friction.
