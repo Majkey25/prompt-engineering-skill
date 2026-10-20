@@ -202,7 +202,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     output = Path(args.out)
     try:
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(rendered, encoding="utf-8")
+        with output.open("x", encoding="utf-8") as destination:
+            destination.write(rendered)
     except OSError as exc:
         print(f"make_prompt_eval: could not write {output}: {exc}", file=sys.stderr)
         return 2

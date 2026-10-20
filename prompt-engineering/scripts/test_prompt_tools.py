@@ -6,9 +6,12 @@ from __future__ import annotations
 import argparse
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 from make_prompt_eval import build_manifest
+from make_prompt_eval import main as make_eval
 from prompt_lint import lint
 
 
@@ -96,6 +99,16 @@ class PromptLintTests(unittest.TestCase):
 
 
 class PromptEvalTests(unittest.TestCase):
+    def test_existing_manifest_is_preserved(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "eval.json"
+            with redirect_stdout(StringIO()):
+                self.assertEqual(0, make_eval(["--out", str(output)]))
+            output.write_text("existing evaluation results", encoding="utf-8")
+            with redirect_stderr(StringIO()):
+                self.assertEqual(2, make_eval(["--out", str(output)]))
+            self.assertEqual("existing evaluation results", output.read_text(encoding="utf-8"))
+
     def test_manifest_contains_three_comparable_variants(self) -> None:
         args = argparse.Namespace(
             prompt_type="coding",
