@@ -155,6 +155,8 @@ Return summary, files changed, verification run, blockers, and remaining risks.
 | Source-driven prompt audits | [`source-driven-prompt-audit.md`](./prompt-engineering/references/source-driven-prompt-audit.md) |
 | Token-efficient style | [`token-efficient-caveman-style.md`](./prompt-engineering/references/token-efficient-caveman-style.md) |
 
+`prompt-engineering/scripts/prompt_lint.py` scans regular `.md`, `.txt`, and `.prompt` files inside a selected directory, skipping file symlinks and targets outside that directory. Explicit file arguments may follow symlinks. Directory scans assume a stable tree; they do not isolate reads from concurrent changes to a shared writable tree. Text diagnostics quote paths and excerpts and escape terminal controls; JSON preserves the source data.
+
 Generate a new JSON eval manifest without overwriting existing work:
 
 ```bash

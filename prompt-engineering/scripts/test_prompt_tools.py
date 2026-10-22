@@ -4,15 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import json
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
+from unittest.mock import patch
 
 from make_prompt_eval import build_manifest
 from make_prompt_eval import main as make_eval
-from prompt_lint import lint
+from prompt_lint import iter_inputs, lint, render_text
+from prompt_lint import main as lint_main
 
 
 class PromptLintTests(unittest.TestCase):
@@ -96,6 +99,74 @@ class PromptLintTests(unittest.TestCase):
             "none",
         )
         self.assertEqual([], findings)
+
+
+class PromptLintBoundaryTests(unittest.TestCase):
+    def link(self, path: Path, target: Path, *, directory: bool = False) -> None:
+        try:
+            path.symlink_to(target, target_is_directory=directory)
+        except OSError as exc:
+            self.skipTest(f"Symlink creation is unavailable: {exc}")
+
+    def test_directory_scan_skips_links_and_keeps_regular_nested_prompts(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            selected = root / "selected"
+            selected.mkdir()
+            nested = selected / "nested"
+            nested.mkdir()
+            prompt = nested / "normal.PROMPT"
+            prompt.write_text("regular prompt", encoding="utf-8")
+            outside = root / "outside"
+            outside.mkdir()
+            sentinel = outside / "private.txt"
+            sentinel.write_text("TODO outside sentinel", encoding="utf-8")
+            self.link(selected / "absolute.md", sentinel)
+            self.link(selected / "relative.txt", Path("../outside/private.txt"))
+            self.link(selected / "internal.md", prompt)
+            self.link(selected / "linked-directory", outside, directory=True)
+            self.assertEqual([(str(prompt), "regular prompt")], list(iter_inputs([str(selected)])))
+            # An explicitly selected file still grants access, regardless of suffix or link.
+            self.assertEqual(
+                [(str(selected / "absolute.md"), "TODO outside sentinel")],
+                list(iter_inputs([str(selected / "absolute.md")])),
+            )
+
+    def test_text_output_quotes_paths_and_neutralizes_controls(self) -> None:
+        path = "prompt\nforged\x1b[2J\u202e.md"
+        output = render_text([{"path": path, "mode": "general", "findings": []}])
+        self.assertEqual(f"{path!r} [general]", output.splitlines()[0])
+        self.assertEqual(2, len(output.splitlines()))
+
+    def test_cli_escapes_terminal_sequences_but_json_preserves_prompt_data(self) -> None:
+        prompt = (
+            "TODO \x1b[2J \x1b]8;;https://example.invalid/\x07 link \x1b]8;;\x07 "
+            "\x1b]52;c;dGVzdA==\x07 \x7f \x9d \u202e \u2066 český text"
+        )
+        output = StringIO()
+        with patch("sys.stdin", StringIO(prompt)), redirect_stdout(output):
+            self.assertEqual(0, lint_main(["-", "--mode", "general", "--fail-on", "never"]))
+        rendered = output.getvalue()
+        for character in ["\x1b", "\x07", "\x7f", "\x9d", "\u202e", "\u2066"]:
+            self.assertNotIn(character, rendered)
+            self.assertIn(repr(character)[1:-1], rendered)
+        self.assertIn("český text", rendered)
+        output = StringIO()
+        with patch("sys.stdin", StringIO(prompt)), redirect_stdout(output):
+            self.assertEqual(
+                0, lint_main(["-", "--mode", "general", "--format", "json", "--fail-on", "never"])
+            )
+        document = json.loads(output.getvalue())
+        self.assertEqual(prompt, document["results"][0]["findings"][0]["excerpt"])
+
+    def test_cli_errors_escape_untrusted_path_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing\u202e.md"
+            errors = StringIO()
+            with redirect_stderr(errors):
+                self.assertEqual(2, lint_main([str(missing)]))
+            self.assertNotIn("\u202e", errors.getvalue())
+            self.assertIn("\\u202e", errors.getvalue())
 
 
 class PromptEvalTests(unittest.TestCase):
