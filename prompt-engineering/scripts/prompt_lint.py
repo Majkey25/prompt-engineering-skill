@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import stat
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -39,7 +40,10 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument(
         "paths",
         nargs="+",
-        help="Prompt file, directory, or '-' for stdin. Directories scan .md/.txt/.prompt files.",
+        help=(
+            "Prompt file, directory, or '-' for stdin. Directories scan regular "
+            ".md/.txt/.prompt files, skipping file links and targets outside the selected root."
+        ),
     )
     parser.add_argument(
         "--mode",
@@ -82,9 +86,14 @@ def iter_inputs(paths: Sequence[str]) -> Iterable[tuple[str, str]]:
             yield str(path), path.read_text(encoding="utf-8")
             continue
 
+        root = path.resolve(strict=True)
         for child in sorted(path.rglob("*")):
-            if child.is_file() and child.suffix.lower() in {".md", ".txt", ".prompt"}:
-                yield str(child), child.read_text(encoding="utf-8")
+            if child.suffix.lower() not in {".md", ".txt", ".prompt"}:
+                continue
+            metadata = child.lstat()
+            if not stat.S_ISREG(metadata.st_mode) or not child.resolve(strict=True).is_relative_to(root):
+                continue
+            yield str(child), child.read_text(encoding="utf-8")
 
 
 def infer_mode(path: str, text: str) -> str:
@@ -593,7 +602,7 @@ def render_text(results: Sequence[dict[str, object]]) -> str:
         mode = str(result["mode"])
         findings = result["findings"]
         assert isinstance(findings, list)
-        chunks.append(f"{path} [{mode}]")
+        chunks.append(f"{path!r} [{mode}]")
         if not findings:
             chunks.append("  OK: no heuristic findings")
             continue
@@ -607,7 +616,7 @@ def render_text(results: Sequence[dict[str, object]]) -> str:
             )
             excerpt = raw_finding.get("excerpt")
             if excerpt:
-                chunks.append(f"         {excerpt}")
+                chunks.append(f"         {excerpt!r}")
     return "\n".join(chunks)
 
 
@@ -626,7 +635,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         inputs = list(iter_inputs(args.paths))
     except (OSError, UnicodeError) as exc:
-        print(f"prompt_lint: {exc}", file=sys.stderr)
+        print(f"prompt_lint: {str(exc)!r}", file=sys.stderr)
         return 2
 
     if not inputs:
